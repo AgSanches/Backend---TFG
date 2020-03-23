@@ -12,6 +12,7 @@ class Dog(BaseModel, db.Model):
     weight = db.Column(db.Float, nullable = False)
     height = db.Column(db.Integer, nullable = False)
     observations = db.relationship('DogObservation', backref = 'dog', lazy = 'dynamic')
+    sessions = db.relationship('Session', backref = 'dog', lazy = 'dynamic')
 
     def __init__(self, name, bread, birth, gender, weight, height):
         self.name = name
@@ -26,7 +27,8 @@ class Dog(BaseModel, db.Model):
             'id': self.id ,'name' : self.name, 'bread': self.bread, 
             'birth' : self.birth.strftime("%d/%m/%Y"), 
             'gender' : self.gender, 'weight': self.weight,'height' : self.height,
-            'observations': [ observation.jsonOutput() for observation in self.observations.all() ]
+            'observations': [ observation.jsonOutput() for observation in self.observations.all() ],
+            'sessions': [ session.jsonOutput() for session in self.sessions.all() ],
             }
 
     @classmethod

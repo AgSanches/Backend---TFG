@@ -47,7 +47,6 @@ class DogController(Resource):
 
         return dog.jsonOutput(), 201
 
-
 class DogListController(Resource):
 
     def get(self):

@@ -5,7 +5,8 @@ from flask_jwt_extended import JWTManager
 #Imports
 from controller.user import UserRegister, UserLogin
 from controller.dog import DogController,DogListController,DogObservationController
-
+from controller.session import SessionController
+from controller.toma import TomaController
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -26,6 +27,9 @@ api.add_resource(UserLogin, '/login')
 api.add_resource(DogController, '/dog/get/<string:id>', '/dog/create')
 api.add_resource(DogListController, '/dogs/get')
 api.add_resource(DogObservationController, '/dog/comment/create')
+api.add_resource(SessionController, '/dog/session/create', '/dog/session/get/<string:id>')
+api.add_resource(TomaController, '/dog/toma/create', '/dog/toma/get/<string:id>')
+
 
 if __name__ == '__main__':
     from db import db
