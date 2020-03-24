@@ -23,3 +23,13 @@ def save_file(folder, name ,file):
     except:
         return False, ''
     return True, name
+
+def delete_file(folder,target):
+
+    if os.path.exists(os.path.join(UPLOAD_FOLDER, folder, target)):
+        try:
+            os.remove(os.path.join(UPLOAD_FOLDER, folder, target))
+        except:
+            return False
+
+    return True

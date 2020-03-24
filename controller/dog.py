@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
 from model.dog import Dog, DogObservation
 import werkzeug
-from files import allowed_photo, save_file
+from files import allowed_photo, save_file, delete_file
 
 def getParserDog():
     dog_parser  = reqparse.RequestParser()
@@ -40,6 +40,15 @@ def getParserObservation():
     help="La observación se encuentra vacía")
 
     return observation_parser
+
+def getParserImage():
+    image_parser = reqparse.RequestParser()
+
+    image_parser.add_argument(
+        'dog_id', type= str, required = True, 
+        help="Especifica un perro destino")
+
+    return image_parser
 
 class DogController(Resource):
 
@@ -137,19 +146,15 @@ class DogObservationController(Resource):
 
 class DogUploadImage(Resource):
 
-    dog_parser = reqparse.RequestParser()
+    def post(self):
 
-    dog_parser.add_argument(
-        'dog_id', type= str, required = True, 
-        help="Especifica un perro destino")
+        file_parser = getParserImage()
 
-    dog_parser.add_argument(
+        file_parser.add_argument(
         'file', type = werkzeug.datastructures.FileStorage, required = True, location = "files", 
         help="Añade una imagen")
 
-    def post(self):
-
-        data = DogUploadImage.dog_parser.parse_args()
+        data = file_parser.parse_args()
         dog = Dog.getDogById(data['dog_id'])
 
         if dog is None:
@@ -169,3 +174,27 @@ class DogUploadImage(Resource):
         dog.photo_path = status[1]
         dog.save_to_db()
         return dog.jsonOutput()
+
+    def delete(self):
+
+        data = getParserImage().parse_args()
+
+        dog = Dog.getDogById(data['dog_id'])
+
+        if not dog:
+            return {'message' : "Perro no encontrado"}, 404
+        
+        if dog.photo_path == '':
+            return {'message' : "Este perro no cuenta con ninguna imagen"}, 404
+
+        status = delete_file( dog.folderOutput() , dog.photo_path)
+
+        if status:
+            dog.photo_path = ''
+            try:
+                dog.save_to_db()
+                return {'message' : 'Imagen eliminada'}
+            except:
+                return {"message" : 'Ha ocurrido un problema al eliminar la imagen'}, 500
+        
+        return {"message" : 'Ha ocurrido un problema al eliminar la imagen'}, 500

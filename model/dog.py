@@ -45,7 +45,7 @@ class Dog(BaseModel, db.Model):
             }
 
     def folderOutput(self):
-        return self.name + str(self.id)
+        return "dogFolder-" + str(self.id)
 
     def photoOutput(self):
         return 'photo-dog-' + str(self.id)
@@ -68,7 +68,6 @@ class DogObservation(BaseModel, db.Model):
 
     observation = db.Column(db.String(512), nullable = False)
     dog_id = db.Column(db.Integer, db.ForeignKey('dogs.id'), nullable = False)
-
 
     def __init__(self, dog_id, observation):
         self.observation = observation
