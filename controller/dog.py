@@ -98,6 +98,26 @@ class DogManage(Resource):
 
         return dog.jsonOutput()
 
+    def delete(self):
+        dog_parser = reqparse.RequestParser()
+
+        dog_parser.add_argument(
+            'dog_id', type= str, required = True, 
+            help="Especifica un perro destino")
+
+        dog_id = dog_parser.parse_args()['dog_id']
+
+        dog = Dog.getDogById(dog_id)
+
+        if not dog:
+            return {'message' : 'Perro no existente'}, 404
+        try:
+            dog.delete_from_db()
+        except:
+            return {'message' : 'No se ha podido eliminar el perro'}, 500
+
+        return {'message': 'Perro correctamente eliminado'}
+
 class DogListController(Resource):
 
     def get(self):

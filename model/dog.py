@@ -12,8 +12,8 @@ class Dog(BaseModel, db.Model):
     weight = db.Column(db.Float, nullable = False)
     height = db.Column(db.Integer, nullable = False)
     photo_path = db.Column(db.String(255), nullable = True)
-    observations = db.relationship('DogObservation', backref = 'dog', lazy = 'dynamic')
-    sessions = db.relationship('Session', backref = 'dog', lazy = 'dynamic')
+    observations = db.relationship('DogObservation', backref = 'dog', lazy = 'dynamic', cascade = "all, delete-orphan")
+    sessions = db.relationship('Session', backref = 'dog', lazy = 'dynamic', cascade = "all, delete-orphan")
 
     def __init__(self, name, bread, birth, gender, weight, height, photo_path = ""):
         self.name = name
