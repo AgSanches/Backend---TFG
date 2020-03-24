@@ -24,6 +24,14 @@ class Dog(BaseModel, db.Model):
         self.height = height
         self.photo_path = photo_path
 
+    def update(self, name, bread, birth, gender, weight, height):
+        self.name = name
+        self.bread = bread
+        self.birth = datetime.strptime(birth, "%d/%m/%Y")
+        self.gender = gender
+        self.weight = weight
+        self.height = height
+
     def jsonOutput(self):
         return {
             'id': self.id ,'name' : self.name, 'bread': self.bread, 

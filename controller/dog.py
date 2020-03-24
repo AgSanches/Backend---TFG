@@ -3,8 +3,7 @@ from model.dog import Dog, DogObservation
 import werkzeug
 from files import allowed_photo, save_file
 
-class DogController(Resource):
-
+def getParser():
     dog_parser  = reqparse.RequestParser()
 
     dog_parser.add_argument('name', 
@@ -31,6 +30,10 @@ class DogController(Resource):
     type=int, required=True, 
     help="La altura se encuentra vacía")
 
+    return dog_parser
+
+class DogController(Resource):
+
     def get(self, id):
 
         dog = Dog.getDogById(id)
@@ -40,14 +43,42 @@ class DogController(Resource):
 
         return {'message' : 'Perro no encontrado'}, 404
 
+class DogManage(Resource):
+
     def post(self):
 
-        data = DogController.dog_parser.parse_args()
+        data = getParser().parse_args()
 
         dog = Dog(**data)
         dog.save_to_db()
 
         return dog.jsonOutput(), 201
+
+    def put(self):
+
+        dog_parser = getParser()
+
+        dog_parser.add_argument('dog_id', 
+        type=str, required=True, 
+        help="Elige un perro que editar")
+
+        data = dog_parser.parse_args()
+
+        dog = Dog.getDogById(data['dog_id'])
+
+        if not dog:
+            return {'message' : 'Perro no existente'}, 404
+
+        del data['dog_id']
+        dog.update(**data)
+        
+        try:
+            dog.save_to_db()
+        except:
+            return {
+                'message' : "Ha ocurrido un problema al actualizar el perro, vuelva a intentarlo en otro momento"}, 500
+
+        return dog.jsonOutput()
 
 class DogListController(Resource):
 

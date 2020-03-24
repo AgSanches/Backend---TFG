@@ -6,7 +6,7 @@ from files import UPLOAD_FOLDER
 
 #Imports
 from controller.user import UserRegister, UserLogin
-from controller.dog import DogController,DogListController,DogObservationController, DogUploadImage
+from controller.dog import DogController,DogListController,DogObservationController, DogUploadImage, DogManage
 from controller.session import SessionController
 from controller.toma import TomaController
 
@@ -30,8 +30,10 @@ jwt = JWTManager(app)
 api.add_resource(UserRegister, '/register')
 api.add_resource(UserLogin, '/login')
 
-api.add_resource(DogController, '/dog/get/<string:id>', '/dog/create')
-api.add_resource(DogListController, '/dogs/get')
+api.add_resource(DogController, '/dog/<string:id>',)
+api.add_resource(DogManage, '/dog',)
+
+api.add_resource(DogListController, '/dogs')
 api.add_resource(DogObservationController, '/dog/comment/create')
 api.add_resource(DogUploadImage, '/dog/upload/image')
 
