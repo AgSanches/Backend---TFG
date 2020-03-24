@@ -2,19 +2,24 @@ from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 
+from files import UPLOAD_FOLDER
+
 #Imports
 from controller.user import UserRegister, UserLogin
-from controller.dog import DogController,DogListController,DogObservationController
+from controller.dog import DogController,DogListController,DogObservationController, DogUploadImage
 from controller.session import SessionController
 from controller.toma import TomaController
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # Dont track every changes to objects.
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
 # TODO cambiar secret key, mirar variables .env
 app.secret_key = 'cambiarla'
 api = Api(app)
-
 
 @app.before_first_request
 def create_tables():
@@ -24,10 +29,14 @@ jwt = JWTManager(app)
 
 api.add_resource(UserRegister, '/register')
 api.add_resource(UserLogin, '/login')
+
 api.add_resource(DogController, '/dog/get/<string:id>', '/dog/create')
 api.add_resource(DogListController, '/dogs/get')
 api.add_resource(DogObservationController, '/dog/comment/create')
+api.add_resource(DogUploadImage, '/dog/upload/image')
+
 api.add_resource(SessionController, '/dog/session/create', '/dog/session/get/<string:id>')
+
 api.add_resource(TomaController, '/dog/toma/create', '/dog/toma/get/<string:id>')
 
 

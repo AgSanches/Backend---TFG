@@ -11,25 +11,36 @@ class Dog(BaseModel, db.Model):
     gender = db.Column(db.String(255), nullable = False)
     weight = db.Column(db.Float, nullable = False)
     height = db.Column(db.Integer, nullable = False)
+    photo_path = db.Column(db.String(255), nullable = True)
     observations = db.relationship('DogObservation', backref = 'dog', lazy = 'dynamic')
     sessions = db.relationship('Session', backref = 'dog', lazy = 'dynamic')
 
-    def __init__(self, name, bread, birth, gender, weight, height):
+    def __init__(self, name, bread, birth, gender, weight, height, photo_path = ""):
         self.name = name
         self.bread = bread
         self.birth = datetime.strptime(birth, "%d/%m/%Y")
         self.gender = gender
         self.weight = weight
         self.height = height
+        self.photo_path = photo_path
 
     def jsonOutput(self):
         return {
             'id': self.id ,'name' : self.name, 'bread': self.bread, 
             'birth' : self.birth.strftime("%d/%m/%Y"), 
-            'gender' : self.gender, 'weight': self.weight,'height' : self.height,
+            'gender' : self.gender, 
+            'weight': self.weight, 
+            'height' : self.height,
+            'photo_path' : self.photo_path,
             'observations': [ observation.jsonOutput() for observation in self.observations.all() ],
             'sessions': [ session.jsonOutput() for session in self.sessions.all() ],
             }
+
+    def folderOutput(self):
+        return self.name + str(self.id)
+
+    def photoOutput(self):
+        return 'photo-dog-' + str(self.id)
 
     @classmethod
     def getDogById(cls, id):

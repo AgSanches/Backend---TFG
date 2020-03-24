@@ -1,5 +1,7 @@
 from flask_restful import Resource, reqparse
 from model.dog import Dog, DogObservation
+import werkzeug
+from files import allowed_photo, save_file
 
 class DogController(Resource):
 
@@ -75,3 +77,38 @@ class DogObservationController(Resource):
         observation.save_to_db()
 
         return observation.jsonOutput(), 201
+
+class DogUploadImage(Resource):
+
+    dog_parser = reqparse.RequestParser()
+
+    dog_parser.add_argument(
+        'dog_id', type= str, required = True, 
+        help="Especifica un perro destino")
+
+    dog_parser.add_argument(
+        'file', type = werkzeug.datastructures.FileStorage, required = True, location = "files", 
+        help="Añade una imagen")
+
+    def post(self):
+
+        data = DogUploadImage.dog_parser.parse_args()
+        dog = Dog.getDogById(data['dog_id'])
+
+        if dog is None:
+            return {'message' : 'Perro no encontrado'}, 404
+        
+        if not allowed_photo(data['file'].filename):
+            return { 'message' : "Archivo erróneo, solo se pueden subir imágenes"}, 400 
+
+        status = save_file( 
+            dog.folderOutput(), #Folder Target
+            dog.photoOutput() + '.' + data['file'].filename.split('.')[1],  #Image name
+            data['file'])
+
+        if not status[0]:
+            return {'message' : "No se ha podido subir la imagen, vuelva a intentarlo en otro momento"}, 500
+
+        dog.photo_path = status[1]
+        dog.save_to_db()
+        return dog.jsonOutput()
