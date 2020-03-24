@@ -3,7 +3,7 @@ from model.dog import Dog, DogObservation
 import werkzeug
 from files import allowed_photo, save_file
 
-def getParser():
+def getParserDog():
     dog_parser  = reqparse.RequestParser()
 
     dog_parser.add_argument('name', 
@@ -32,6 +32,15 @@ def getParser():
 
     return dog_parser
 
+def getParserObservation():
+    observation_parser  = reqparse.RequestParser()
+
+    observation_parser.add_argument('observation', 
+    type=str, required=True, 
+    help="La observación se encuentra vacía")
+
+    return observation_parser
+
 class DogController(Resource):
 
     def get(self, id):
@@ -47,7 +56,7 @@ class DogManage(Resource):
 
     def post(self):
 
-        data = getParser().parse_args()
+        data = getParserDog().parse_args()
 
         dog = Dog(**data)
         dog.save_to_db()
@@ -56,7 +65,7 @@ class DogManage(Resource):
 
     def put(self):
 
-        dog_parser = getParser()
+        dog_parser = getParserDog()
 
         dog_parser.add_argument('dog_id', 
         type=str, required=True, 
@@ -71,7 +80,7 @@ class DogManage(Resource):
 
         del data['dog_id']
         dog.update(**data)
-        
+
         try:
             dog.save_to_db()
         except:
@@ -88,18 +97,15 @@ class DogListController(Resource):
 
 class DogObservationController(Resource):
 
-    dog_parser  = reqparse.RequestParser()
-
-    dog_parser.add_argument('observation', 
-    type=str, required=True, 
-    help="La observación se encuentra vacía")
-
-    dog_parser.add_argument('dog_id', 
-    type=str, required=True, 
-    help="Especifica un perro destino")
-
     def post(self):
-        data = DogObservationController.dog_parser.parse_args()
+
+        observation_parser = getParserObservation()
+
+        observation_parser.add_argument('dog_id', 
+        type=str, required=True, 
+        help="Especifica un perro destino")
+
+        data = observation_parser.parse_args()
 
         if Dog.getDogById(data['dog_id']) is None:
             return {'message' : 'Perro no encontrado'}, 404
@@ -108,6 +114,26 @@ class DogObservationController(Resource):
         observation.save_to_db()
 
         return observation.jsonOutput(), 201
+
+    def put(self):
+        observation_parser = getParserObservation()
+        observation_parser.add_argument('observation_id', 
+        type=str, required=True, help="Especifica una observación destino")
+
+        data = observation_parser.parse_args()
+        observation = DogObservation.getObservationById(data['observation_id'])
+
+        if not observation:
+            return {'message' : "Observación no encontrada"}, 404
+
+        observation.observation = data['observation']
+
+        try:
+            observation.save_to_db()
+        except:
+            return {'message' : "No se ha podido actualizar"}, 500
+
+        return observation.jsonOutput()
 
 class DogUploadImage(Resource):
 

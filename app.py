@@ -34,7 +34,7 @@ api.add_resource(DogController, '/dog/<string:id>',)
 api.add_resource(DogManage, '/dog',)
 
 api.add_resource(DogListController, '/dogs')
-api.add_resource(DogObservationController, '/dog/comment/create')
+api.add_resource(DogObservationController, '/observation/dog')
 api.add_resource(DogUploadImage, '/dog/upload/image')
 
 api.add_resource(SessionController, '/dog/session/create', '/dog/session/get/<string:id>')
