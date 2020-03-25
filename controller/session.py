@@ -42,27 +42,6 @@ class SessionManage(Resource):
 
         return session.jsonOutput()
 
-    def delete(self):
-
-        session_parser  = reqparse.RequestParser()
-
-        session_parser.add_argument('session_id', 
-        type=int, required=True, 
-        help="Hay que seleccionar una sesión destino")
-
-        data = session_parser.parse_args()
-        session = Session.getSessionById(data['session_id'])
-
-        if not session:
-            return {'message':"No existe ninguna sesión con este id"}, 404
-
-        try:
-            session.delete_from_db()
-        except:
-            return {'message' : 'No se ha podido eliminar la sesión'}, 500
-
-        return { 'message':"Sesión eliminada correctamente" }
-
     def put(self):
 
         session_parser  = getSessionParser()
@@ -100,4 +79,16 @@ class SessionController(Resource):
 
         return session.jsonOutput()
 
+    def delete(self, id):
 
+        session = Session.getSessionById(id)
+
+        if not session:
+            return {'message':"No existe ninguna sesión con este id"}, 404
+
+        try:
+            session.delete_from_db()
+        except:
+            return {'message' : 'No se ha podido eliminar la sesión'}, 500
+
+        return { 'message':"Sesión eliminada correctamente" }

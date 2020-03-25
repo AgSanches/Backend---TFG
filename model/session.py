@@ -27,7 +27,8 @@ class Session(BaseModel, db.Model):
             'name' : self.name,
             'dog_id' : self._dog_id,
             'conclusion_ia' : self.conclusion_ia,
-            'conclusion_expert' : self.conclusion_expert
+            'conclusion_expert' : self.conclusion_expert,
+            'tomas': [ toma.jsonOutput() for toma in self.tomas.all() ]
         }
 
     @classmethod
