@@ -4,12 +4,13 @@ from flask_jwt_extended import JWTManager
 
 from files import UPLOAD_FOLDER
 
+from os import environ
+
 #Imports
 from controller.user import UserRegister, UserLogin
 from controller.dog import DogController,DogListController,DogObservationController, DogUploadImage, DogManage
 from controller.session import SessionController, SessionManage
 from controller.toma import TomaController, TomaManage
-
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -17,8 +18,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-# TODO cambiar secret key, mirar variables .env
-app.secret_key = 'cambiarla'
+app.secret_key = environ.get('SECRET_KEY')
 api = Api(app)
 
 @app.before_first_request
