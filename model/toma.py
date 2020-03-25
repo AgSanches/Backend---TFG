@@ -17,6 +17,11 @@ class Toma(BaseModel, db.Model):
         self.conclusion_ia = conclusion_ia
         self.conclusion_expert = conclusion_expert
 
+    def update(self, name, conclusion_ia, conclusion_expert):
+        self.name = name
+        self.conclusion_ia = conclusion_ia
+        self.conclusion_expert = conclusion_expert
+
     def jsonOutput(self):
         return {
             'id':self.id,
