@@ -7,7 +7,7 @@ from files import UPLOAD_FOLDER
 #Imports
 from controller.user import UserRegister, UserLogin
 from controller.dog import DogController,DogListController,DogObservationController, DogUploadImage, DogManage
-from controller.session import SessionController
+from controller.session import SessionController, SessionManage
 from controller.toma import TomaController
 
 
@@ -37,7 +37,8 @@ api.add_resource(DogListController, '/dogs')
 api.add_resource(DogObservationController, '/observation/dog')
 api.add_resource(DogUploadImage, '/dog/upload/image')
 
-api.add_resource(SessionController, '/dog/session/create', '/dog/session/get/<string:id>')
+api.add_resource(SessionController, '/dog/session/<string:id>')
+api.add_resource(SessionManage, '/dog/session/manage')
 
 api.add_resource(TomaController, '/dog/toma/create', '/dog/toma/get/<string:id>')
 

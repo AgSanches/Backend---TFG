@@ -2,7 +2,6 @@ from flask_restful import Resource, reqparse
 from model.session import Session
 from model.toma import Toma
 
-
 class TomaController(Resource):
 
     def get(self, id):
@@ -47,4 +46,3 @@ class TomaController(Resource):
             return {"message": "No se ha podido guardar la toma"}, 500
 
         return toma.jsonOutput()
-

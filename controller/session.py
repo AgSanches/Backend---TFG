@@ -3,36 +3,30 @@ from model.session import Session
 from model.dog import Dog
 
 
-class SessionController(Resource):
+def getSessionParser():
+    session_parser  = reqparse.RequestParser()
 
-    def get(self, id):
+    session_parser.add_argument('name', 
+    type=str, required=True, 
+    help="El nombre se encuentra vacío")
 
-        session = Session.getSessionById(id)
+    session_parser.add_argument('conclusion_ia', 
+    type=str, required=False)
 
-        if not session:
-            return {
-                'message': 'No se ha encontrado ninguna sesión con este id: {}'.format(id)
-                }, 404
+    session_parser.add_argument('conclusion_expert', 
+    type=str, required=False)
 
-        return session.jsonOutput()
+    return session_parser
+
+class SessionManage(Resource):
 
     def post(self):
 
-        session_parser  = reqparse.RequestParser()
-
-        session_parser.add_argument('name', 
-        type=str, required=True, 
-        help="El nombre se encuentra vacío")
+        session_parser  = getSessionParser()
 
         session_parser.add_argument('dog_id', 
         type=int, required=True, 
         help="Hay que asignar un perro destino")
-
-        session_parser.add_argument('conclusion_ia', 
-        type=str, required=False)
-
-        session_parser.add_argument('conclusion_expert', 
-        type=str, required=False)
 
         data = session_parser.parse_args()
 
@@ -47,4 +41,63 @@ class SessionController(Resource):
             return {"message": "No se ha podido guardar la sesión"}, 500
 
         return session.jsonOutput()
+
+    def delete(self):
+
+        session_parser  = reqparse.RequestParser()
+
+        session_parser.add_argument('session_id', 
+        type=int, required=True, 
+        help="Hay que seleccionar una sesión destino")
+
+        data = session_parser.parse_args()
+        session = Session.getSessionById(data['session_id'])
+
+        if not session:
+            return {'message':"No existe ninguna sesión con este id"}, 404
+
+        try:
+            session.delete_from_db()
+        except:
+            return {'message' : 'No se ha podido eliminar la sesión'}, 500
+
+        return { 'message':"Sesión eliminada correctamente" }
+
+    def put(self):
+
+        session_parser  = getSessionParser()
+
+        session_parser.add_argument('session_id', 
+        type=int, required=True, 
+        help="Hay que asignar una sesión destino")
+
+        data = session_parser.parse_args()
+        session = Session.getSessionById(data['session_id'])
+
+        if not session:
+            return {"message" : "Sesión no existente"}, 404
+
+        del data['session_id']
+        session.update(**data)
+
+        try:
+            session.save_to_db()
+        except:
+            return {"message": "No se ha podido guardar la sesión"}, 500
+
+        return session.jsonOutput()
+
+class SessionController(Resource):
+
+    def get(self, id):
+
+        session = Session.getSessionById(id)
+
+        if not session:
+            return {
+                'message': 'No se ha encontrado ninguna sesión con este id: {}'.format(id)
+                }, 404
+
+        return session.jsonOutput()
+
 
