@@ -1,4 +1,5 @@
 from model.base import BaseModel, db
+import os
 
 class Session(BaseModel, db.Model):
 
@@ -8,7 +9,7 @@ class Session(BaseModel, db.Model):
     conclusion_ia = db.Column(db.String(255), nullable = True)
     conclusion_expert = db.Column(db.String(255), nullable = True)
     _dog_id = db.Column(db.Integer, db.ForeignKey('dogs.id'), nullable = False)
-    tomas = db.relationship('Toma', lazy = 'dynamic', cascade = "all, delete-orphan")
+    tomas = db.relationship('Toma', backref="session", lazy = 'dynamic', cascade = "all, delete-orphan")
 
     def __init__(self, name, dog_id, conclusion_ia = "", conclusion_expert = ""):
         self.name = name
@@ -20,6 +21,9 @@ class Session(BaseModel, db.Model):
         self.name = name
         self.conclusion_ia = conclusion_ia
         self.conclusion_expert = conclusion_expert
+
+    def getFolder(self):
+        return os.path.join(self.dog.folderOutput(), "Sesion" + str(self.id))
 
     def jsonOutput(self):
         return {

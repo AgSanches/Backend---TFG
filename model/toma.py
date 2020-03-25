@@ -1,4 +1,5 @@
 from model.base import BaseModel, db
+import os
 
 class Toma(BaseModel, db.Model):
 
@@ -9,7 +10,12 @@ class Toma(BaseModel, db.Model):
     conclusion_ia = db.Column(db.String(255), nullable = True)
     conclusion_expert = db.Column(db.String(255), nullable = True)
 
-    #TODO Archivos y videos
+    video_front = db.Column(db.String(255), nullable = True)
+    video_middle = db.Column(db.String(255), nullable = True)
+    video_back = db.Column(db.String(255), nullable = True)
+
+    sensor_data_front = db.Column(db.String(255), nullable = True)
+    sensor_data_back = db.Column(db.String(255),  nullable = True)
 
     def __init__(self, name, session_id, conclusion_ia = "", conclusion_expert = ""):
         self.name = name
@@ -22,13 +28,24 @@ class Toma(BaseModel, db.Model):
         self.conclusion_ia = conclusion_ia
         self.conclusion_expert = conclusion_expert
 
+    def getVideoName(self, prefix):
+        return "toma_" + prefix + "_" + str(self.id)
+
+    def getFolder(self):
+        return os.path.join(self.session.getFolder(),'Toma' + str(self.id))
+
     def jsonOutput(self):
         return {
             'id':self.id,
             'name' : self.name,
             'session_id' : self._session_id,
             'conclusion_ia' : self.conclusion_ia,
-            'conclusion_expert' : self.conclusion_expert
+            'conclusion_expert' : self.conclusion_expert,
+            'video_front' : self.video_front,
+            'video_middle' : self.video_middle,
+            'video_back' : self.video_back,
+            'sensor_data_front' : self.sensor_data_front,
+            'sensor_data_back' : self.sensor_data_back
         }
 
     @classmethod

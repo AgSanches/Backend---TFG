@@ -15,9 +15,12 @@ def allowed_video(filename):
 def allowed_sensors(filename):
     return '.' in filename and filename.split('.')[1].lower() in ALLOWED_SENSORS
 
+def checkPathExists(path):
+    return os.path.exists(path)
+
 def save_file(folder, name ,file):
-    if not os.path.exists(os.path.join(UPLOAD_FOLDER, folder)):
-        os.mkdir(os.path.join(UPLOAD_FOLDER, folder))
+    if not checkPathExists(os.path.join(UPLOAD_FOLDER, folder)):
+        os.makedirs(os.path.join(UPLOAD_FOLDER, folder))
     try :
         file.save(os.path.join(UPLOAD_FOLDER, folder, name))
     except:

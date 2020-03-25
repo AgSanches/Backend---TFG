@@ -2,7 +2,6 @@ from flask_restful import Resource, reqparse
 from model.session import Session
 from model.dog import Dog
 
-
 def getSessionParser():
     session_parser  = reqparse.RequestParser()
 

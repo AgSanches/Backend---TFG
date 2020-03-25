@@ -112,7 +112,6 @@ class DogManage(Resource):
 
         return dog.jsonOutput()
 
-
 class DogListController(Resource):
 
     def get(self):
