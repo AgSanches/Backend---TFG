@@ -6,9 +6,9 @@ from files import UPLOAD_FOLDER
 
 from os import environ
 
-#Imports
+# Imports
 from controller.user import UserRegister, UserLogin
-from controller.dog import DogController,DogListController,DogObservationController, DogUploadImage, DogManage
+from controller.dog import DogController, DogListController, DogObservationController, DogImage, DogManage
 from controller.session import SessionController, SessionManage
 from controller.toma import TomaController, TomaManage, TomaUploadSensors, TomaUploadVideo
 
@@ -31,7 +31,7 @@ api.add_resource(DogManage, '/dog',)
 
 api.add_resource(DogListController, '/dogs')
 api.add_resource(DogObservationController, '/observation/dog')
-api.add_resource(DogUploadImage, '/dog/upload/image')
+api.add_resource(DogImage, '/dog/upload/image/<string:id>')
 
 api.add_resource(SessionController, '/dog/session/<string:id>')
 api.add_resource(SessionManage, '/dog/session/manage')
@@ -46,4 +46,4 @@ api.add_resource(TomaUploadSensors, '/dog/toma/upload/sensor/<string:id>')
 if __name__ == '__main__':
     from db import db
     db.init_app(app)
-    app.run( port= 5000, debug = True)
+    app.run(port=5000, debug=True)

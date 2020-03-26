@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4d462dfe-054b-4751-a032-0ef37f4cddbe" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../controller/dog.py" beforeDir="false" afterPath="$PROJECT_DIR$/../controller/dog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../files.py" beforeDir="false" afterPath="$PROJECT_DIR$/../files.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1Zg8bfCKwV1xG3nt55Dq1ysh9X0" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../uploads" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/../uploads" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Flask" type="Python.FlaskServer" nameIsGenerated="true">
+      <option name="flaskDebug" value="true" />
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="SECRET_KEY" value="asdsad213213sadkasd" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/.." />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4d462dfe-054b-4751-a032-0ef37f4cddbe" name="Default Changelist" comment="" />
+      <created>1585249451205</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585249451205</updated>
+      <workItem from="1585249567808" duration="2597000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="279" y="394" width="800" height="677" key="#Inspections" timestamp="1585252184547">
+      <screen x="59" y="27" width="2501" height="1413" />
+    </state>
+    <state x="279" y="394" width="800" height="677" key="#Inspections/59.27.2501.1413@59.27.2501.1413" timestamp="1585252184547" />
+    <state x="142" y="390" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585252177590">
+      <screen x="59" y="27" width="2501" height="1413" />
+    </state>
+    <state x="142" y="390" key="#com.intellij.execution.impl.EditConfigurationsDialog/59.27.2501.1413@59.27.2501.1413" timestamp="1585252177590" />
+    <state x="421" y="510" width="515" height="444" key="EnvironmentVariablesDialog" timestamp="1585250082327">
+      <screen x="59" y="27" width="2501" height="1413" />
+    </state>
+    <state x="421" y="510" width="515" height="444" key="EnvironmentVariablesDialog/59.27.2501.1413@59.27.2501.1413" timestamp="1585250082327" />
+    <state width="1205" height="397" key="GridCell.Tab.0.bottom" timestamp="1585250201791">
+      <screen x="59" y="27" width="2501" height="1413" />
+    </state>
+    <state width="1205" height="397" key="GridCell.Tab.0.bottom/59.27.2501.1413@59.27.2501.1413" timestamp="1585250201791" />
+    <state width="1205" height="397" key="GridCell.Tab.0.center" timestamp="1585250201790">
+      <screen x="59" y="27" width="2501" height="1413" />
+    </state>
+    <state width="1205" height="397" key="GridCell.Tab.0.center/59.27.2501.1413@59.27.2501.1413" timestamp="1585250201790" />
+    <state width="1205" height="397" key="GridCell.Tab.0.left" timestamp="1585250201790">
+      <screen x="59" y="27" width="2501" height="1413" />
+    </state>
+    <state width="1205" height="397" key="GridCell.Tab.0.left/59.27.2501.1413@59.27.2501.1413" timestamp="1585250201790" />
+    <state width="1205" height="397" key="GridCell.Tab.0.right" timestamp="1585250201790">
+      <screen x="59" y="27" width="2501" height="1413" />
+    </state>
+    <state width="1205" height="397" key="GridCell.Tab.0.right/59.27.2501.1413@59.27.2501.1413" timestamp="1585250201790" />
+    <state x="358" y="363" key="SettingsEditor" timestamp="1585252061354">
+      <screen x="59" y="27" width="2501" height="1413" />
+    </state>
+    <state x="358" y="363" key="SettingsEditor/59.27.2501.1413@59.27.2501.1413" timestamp="1585252061354" />
+    <state x="340" y="560" key="com.intellij.ide.util.TipDialog" timestamp="1585249455842">
+      <screen x="59" y="27" width="2501" height="1413" />
+    </state>
+    <state x="340" y="560" key="com.intellij.ide.util.TipDialog/59.27.2501.1413@59.27.2501.1413" timestamp="1585249455842" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/_$Flask.coverage" NAME="Flask Coverage Results" MODIFIED="1585250112629" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+  </component>
+</project>

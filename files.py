@@ -4,7 +4,10 @@ from werkzeug.utils import secure_filename
 ALLOWED_PHOTOS = {'png', 'jpg', 'jpeg'}
 ALLOWED_VIDEOS = {'mp4', 'mp3'}
 ALLOWED_SENSORS = {'csv'}
-UPLOAD_FOLDER = './uploads/'
+UPLOAD_FOLDER = './uploads'
+
+def returnDefaultPhoto():
+    return os.path.join(UPLOAD_FOLDER, 'default-dog.jpg')
 
 def allowed_photo(filename):
     return '.' in filename and filename.split('.')[1].lower() in ALLOWED_PHOTOS
@@ -17,6 +20,12 @@ def allowed_sensors(filename):
 
 def checkPathExists(path):
     return os.path.exists(path)
+
+def getFile(folder, name):
+    return os.path.join(UPLOAD_FOLDER, folder, name)
+
+def checkFileExists(folder, file):
+    return os.path.isfile(os.path.join(UPLOAD_FOLDER, folder, file))
 
 def save_file(folder, name ,file):
     if not checkPathExists(os.path.join(UPLOAD_FOLDER, folder)):
