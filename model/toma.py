@@ -28,7 +28,7 @@ class Toma(BaseModel, db.Model):
         self.conclusion_ia = conclusion_ia
         self.conclusion_expert = conclusion_expert
 
-    def getVideoName(self, prefix):
+    def getFileName(self, prefix):
         return "toma_" + prefix + "_" + str(self.id)
 
     def getFolder(self):

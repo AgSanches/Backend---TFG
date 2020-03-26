@@ -44,6 +44,7 @@ api.add_resource(TomaController, '/dog/toma/<string:id>')
 api.add_resource(TomaManage, '/dog/toma/manage')
 
 api.add_resource(TomaUploadVideo, '/dog/toma/upload/video/<string:id>')
+api.add_resource(TomaUploadSensors, '/dog/toma/upload/sensor/<string:id>')
 
 
 if __name__ == '__main__':

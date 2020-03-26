@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse
 from model.session import Session
 from model.toma import Toma
 import werkzeug
-from files import allowed_video,save_file
+from files import allowed_video,save_file, allowed_sensors
 
 def getTomaParser():
 
@@ -30,6 +30,21 @@ def getTomaFilesParser():
 
     return toma_parser
 
+def manageDataToma(data, toma, allowed_item):
+
+    returnDict = {}
+
+    for key,content in data.items():
+
+            if content == None:
+                continue
+
+            if allowed_item(content.filename):
+                name = toma.getFileName(key) + '.' + content.filename.split('.')[1]
+                returnDict[name] = content, key
+    
+    return returnDict
+    
 class TomaManage(Resource):
 
     def post(self):
@@ -132,20 +147,11 @@ class TomaUploadVideo(Resource):
         if toma is None:
             return {'message' : 'Toma no existente'}, 404
 
-        videos = {}
-
-        for key,video in data.items():
-
-            if video == None:
-                continue
-
-            if allowed_video(video.filename):
-                name = toma.getVideoName(key) + '.' + video.filename.split('.')[1]
-                videos[name] = video, key
+        videos = manageDataToma(data, toma, allowed_video)
 
         if len(videos) < 1:
             return {'message' : 'No se han enviado videos o no son archivos correctos.'}, 400
-
+        
         for key, video in videos.items():
             status = save_file(toma.getFolder(), key ,video[0])
             if not status[0]:
@@ -157,9 +163,52 @@ class TomaUploadVideo(Resource):
                 toma.video_middle = key
             else:
                 toma.video_back = key
+
+        try:
+            toma.save_to_db()
+        except:
+            return {'message': "Ha ocurrido un problema al almacenar los datos, vuelva a intentarlo"},500
             
         return toma.jsonOutput()
 
-
 class TomaUploadSensors(Resource):
-    pass
+    
+    def post(self, id):
+        file_parser = reqparse.RequestParser()
+
+        file_parser.add_argument(
+        'sensor_data_front', type = werkzeug.datastructures.FileStorage, 
+        required = False, location = "files")
+
+        file_parser.add_argument(
+        'sensor_data_back', type = werkzeug.datastructures.FileStorage, 
+        required = False, location = "files")
+
+        data = file_parser.parse_args()
+
+        toma = Toma.getTomaById(id)
+
+        if toma is None:
+            return {'message' : 'Toma no existente'}, 404
+
+        sensors = manageDataToma(data, toma, allowed_sensors)
+
+        if len(sensors) < 1:
+            return {'message' : 'No se han enviado datos o no son archivos correctos.'}, 400
+        
+        for key, sensor in sensors.items():
+            status = save_file(toma.getFolder(), key ,sensor[0])
+            if not status[0]:
+                return {'Ha ocurrido un problema al almacenar uno de los datos, vuelva a intentarlo'}, 500
+            
+            if sensor[1] == 'sensor_data_front':
+                toma.sensor_data_front = key
+            elif sensor[1] == 'sensor_data_back':
+                toma.sensor_data_back = key
+            
+        try:
+            toma.save_to_db()
+        except:
+            return {'message': "Ha ocurrido un problema al almacenar los datos, vuelva a intentarlo"},500
+        
+        return toma.jsonOutput()
