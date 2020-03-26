@@ -1,8 +1,9 @@
 from flask_restful import Resource, reqparse
 from model.session import Session
 from model.toma import Toma
+from flask import send_file
 import werkzeug
-from files import allowed_video,save_file, allowed_sensors
+from files import allowed_video,save_file, allowed_sensors, checkFileExists, getFile
 
 def getTomaParser():
 
@@ -122,7 +123,32 @@ class TomaController(Resource):
 
         return {'message' : 'Toma eliminada'}
 
-class TomaUploadVideo(Resource):
+
+class TomaGetVideo(Resource):
+
+    def get(self, id, name):
+
+        if name not in ['front', 'middle', 'back']:
+            return {'message': "Especifica que tipo de video deseas obtener, front, middle o back"}, 400
+
+        toma = Toma.getTomaById(id)
+
+        if toma is None:
+            return {'message' : "La toma no existe"}, 404
+
+        if name == 'front':
+            video = toma.video_front
+        elif name == 'middle':
+            video = toma.video_middle
+        else:
+            video = toma.video_back
+
+        if video == '' or  not checkFileExists(toma.getFolder(), video):
+            return {'El video pedido no existe'}, 404
+
+        return send_file(getFile(toma.getFolder(), video))
+
+class TomaManageVideo(Resource):
 
     def post(self, id):
 
@@ -171,7 +197,7 @@ class TomaUploadVideo(Resource):
             
         return toma.jsonOutput()
 
-class TomaUploadSensors(Resource):
+class TomaManageSensors(Resource):
     
     def post(self, id):
         file_parser = reqparse.RequestParser()
