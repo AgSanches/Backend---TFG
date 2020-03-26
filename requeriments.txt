@@ -1,3 +1,5 @@
-Python 3.7
-Flask_restful
-Flask-SqlAlchemy
+Flask
+Flask-RESTful
+Flask-JWT-Extended
+Flask-SQLAlchemy
+uwsgi
