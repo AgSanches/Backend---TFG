@@ -21,10 +21,6 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.secret_key = environ.get('SECRET_KEY')
 api = Api(app)
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
 jwt = JWTManager(app)
 
 api.add_resource(UserRegister, '/register')
