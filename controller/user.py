@@ -65,6 +65,9 @@ class UserLogin(Resource):
             refresh_token = create_refresh_token(user.id)
 
             return {
+                'name' : user.name,
+                'surname' : user.surname,
+                'email' : user.email,
                 'access_token' : access_token,
                 'refresh_token' : refresh_token
             }, 200

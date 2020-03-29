@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS, cross_origin
 
 from files import UPLOAD_FOLDER
 
@@ -17,6 +18,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.secret_key = environ.get('SECRET_KEY')
 api = Api(app)
