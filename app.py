@@ -22,7 +22,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-app.secret_key = environ.get('SECRET_KEY')
+app.secret_key = str(environ.get('SECRET_KEY')) + "adrian"
 api = Api(app)
 
 jwt = JWTManager(app)

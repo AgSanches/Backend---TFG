@@ -67,9 +67,8 @@ class UserLogin(Resource):
             return {
                 'name' : user.name,
                 'surname' : user.surname,
-                'email' : user.email,
                 'access_token' : access_token,
                 'refresh_token' : refresh_token
             }, 200
 
-        return {'error' : 'Invalid credentials'}, 401
+        return {'message' : 'Credenciales no válidas'}, 401
