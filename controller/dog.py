@@ -69,13 +69,17 @@ class DogController(Resource):
 
         return {'message': 'Perro correctamente eliminado'}
 
-class DogName(Resource):
+class DogFindByName(Resource):
 
     def get(self, name):
-
         dogs = Dog.getDogsByName(name)
-
         return [dog.jsonOutput() for dog in dogs]
+
+class DogCount(Resource):
+
+    def get(self):
+        dogs = len(Dog.getDogsCount())
+        return {'count': dogs}
 
 
 class DogManage(Resource):
