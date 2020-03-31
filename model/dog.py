@@ -68,8 +68,23 @@ class Dog(BaseModel, db.Model):
         return cls.query.filter(cls.name.like(search)).all()
 
     @classmethod
-    def getDogs(cls):
-        return cls.query.all()
+    def getDogs(cls, limit = 100, orderby = 'updated_at', sortby='desc', offset = 0):
+        query = cls.query
+
+        if orderby == 'updated_at':
+            if sortby == 'asc':
+                query = query.order_by(db.asc(cls.updated_at))
+            else:
+                query = query.order_by(db.desc(cls.updated_at))
+        else:
+            if sortby == 'asc':
+                query = query.order_by(db.asc(cls.name))
+            else:
+                query = query.order_by(db.desc(cls.name))
+
+        return query.offset(offset).limit(limit)
+
+
 
 class DogObservation(BaseModel, db.Model):
 

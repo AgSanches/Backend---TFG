@@ -74,9 +74,8 @@ class DogName(Resource):
     def get(self, name):
 
         dogs = Dog.getDogsByName(name)
-        print(dogs)
 
-        return {}
+        return [dog.jsonOutput() for dog in dogs]
 
 
 class DogManage(Resource):
@@ -121,6 +120,12 @@ class DogListController(Resource):
 
     def get(self):
         data = Dog.getDogs()
+        return [dog.jsonOutput() for dog in data]
+
+class DogListWithParamsController(Resource):
+
+    def get(self, limit, order, method, offset):
+        data = Dog.getDogs(limit = limit, offset = offset, orderby = order, sortby = method)
         return [dog.jsonOutput() for dog in data]
 
 
