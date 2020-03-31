@@ -9,7 +9,7 @@ from os import environ
 
 # Imports
 from controller.user import UserRegister, UserLogin
-from controller.dog import DogController, DogListController, DogObservationController, DogImage, DogManage
+from controller.dog import DogController, DogListController, DogObservationController, DogImage, DogManage, DogName
 from controller.session import SessionController, SessionManage
 from controller.toma import TomaController, TomaManage, TomaManageSensors, TomaManageVideo, TomaGetVideo
 
@@ -31,6 +31,7 @@ api.add_resource(UserRegister, '/register')
 api.add_resource(UserLogin, '/login')
 
 api.add_resource(DogController, '/dog/<string:id>',)
+api.add_resource(DogName, '/dog/name/<string:name>',)
 api.add_resource(DogManage, '/dog',)
 
 api.add_resource(DogListController, '/dogs')

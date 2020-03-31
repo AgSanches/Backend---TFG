@@ -2,18 +2,61 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4d462dfe-054b-4751-a032-0ef37f4cddbe" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../controller/dog.py" beforeDir="false" afterPath="$PROJECT_DIR$/../controller/dog.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../controller/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/../controller/user.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../data.db" beforeDir="false" afterPath="$PROJECT_DIR$/../data.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../model/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/../model/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../model/dog.py" beforeDir="false" afterPath="$PROJECT_DIR$/../model/dog.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="data" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="data" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="data" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="981a47c2:SqliteImplModel$Schema" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/../.idea" />
+      </set>
+    </option>
   </component>
   <component name="ProjectId" id="1Zg8bfCKwV1xG3nt55Dq1ysh9X0" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -24,6 +67,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../uploads" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -85,7 +129,10 @@
       <option name="presentableId" value="Default" />
       <updated>1585249451205</updated>
       <workItem from="1585249567808" duration="5545000" />
-      <workItem from="1585563854037" duration="1116000" />
+      <workItem from="1585563854037" duration="1804000" />
+      <workItem from="1585580263401" duration="635000" />
+      <workItem from="1585589806134" duration="1797000" />
+      <workItem from="1585648705344" duration="1273000" />
     </task>
     <servers />
   </component>

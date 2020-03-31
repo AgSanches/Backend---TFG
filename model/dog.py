@@ -16,6 +16,7 @@ class Dog(BaseModel, db.Model):
     sessions = db.relationship('Session', backref = 'dog', lazy = 'dynamic', cascade = "all, delete-orphan")
 
     def __init__(self, name, bread, birth, gender, weight, height, photo_path = ""):
+        super(Dog, self).__init__()
         self.name = name
         self.bread = bread
         self.birth = datetime.strptime(birth, "%d/%m/%Y")
@@ -31,6 +32,7 @@ class Dog(BaseModel, db.Model):
         self.gender = gender
         self.weight = weight
         self.height = height
+        self.updated_at = datetime.now()
 
     def jsonOutput(self):
         return {
@@ -40,6 +42,8 @@ class Dog(BaseModel, db.Model):
             'weight': self.weight, 
             'height' : self.height,
             'photo_path' : self.photo_path,
+            'created_at': self.created_at.strftime("%d/%m/%Y, %H:%M:%S"),
+            'updated_at': self.created_at.strftime("%d/%m/%Y, %H:%M:%S"),
             'observations': [ observation.jsonOutput() for observation in self.observations.all() ],
             'sessions': [ session.jsonOutput() for session in self.sessions.all() ],
             }
@@ -57,6 +61,11 @@ class Dog(BaseModel, db.Model):
     @classmethod
     def getDogByName(cls, name):
         return cls.query.filter_by(name = name).all()
+
+    @classmethod
+    def getDogsByName(cls, name):
+        search = "%{}%".format(name)
+        return cls.query.filter(cls.name.like(search)).all()
 
     @classmethod
     def getDogs(cls):

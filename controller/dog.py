@@ -69,6 +69,15 @@ class DogController(Resource):
 
         return {'message': 'Perro correctamente eliminado'}
 
+class DogName(Resource):
+
+    def get(self, name):
+
+        dogs = Dog.getDogsByName(name)
+        print(dogs)
+
+        return {}
+
 
 class DogManage(Resource):
 

@@ -67,6 +67,8 @@ class UserLogin(Resource):
             return {
                 'name' : user.name,
                 'surname' : user.surname,
+                'email': user.email,
+                'password': '',
                 'access_token' : access_token,
                 'refresh_token' : refresh_token
             }, 200

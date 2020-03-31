@@ -16,5 +16,6 @@ class BaseModel():
         db.session.commit()
     
     def save_to_db(self):
+        self.updated_at = datetime.now()
         db.session.add(self)
         db.session.commit()
