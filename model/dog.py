@@ -32,7 +32,6 @@ class Dog(BaseModel, db.Model):
         self.gender = gender
         self.weight = weight
         self.height = height
-        self.updated_at = datetime.now()
 
     def jsonOutput(self):
         return {
@@ -42,8 +41,8 @@ class Dog(BaseModel, db.Model):
             'weight': self.weight, 
             'height' : self.height,
             'photo_path' : self.photo_path,
-            'created_at': self.created_at.strftime("%d/%m/%Y, %H:%M:%S"),
-            'updated_at': self.created_at.strftime("%d/%m/%Y, %H:%M:%S"),
+            'created_at': self.created_at.timestamp() * 1000,
+            'updated_at': self.updated_at.timestamp() * 1000,
             'observations': [ observation.jsonOutput() for observation in self.observations.all() ],
             'sessions': [ session.jsonOutput() for session in self.sessions.all() ],
             }
