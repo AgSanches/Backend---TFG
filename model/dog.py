@@ -19,7 +19,10 @@ class Dog(BaseModel, db.Model):
         super(Dog, self).__init__()
         self.name = name
         self.bread = bread
-        self.birth = datetime.strptime(birth, "%d/%m/%Y")
+        try:
+            self.birth = datetime.strptime(birth, "%d/%m/%Y")
+        except:
+            self.birth = datetime.now()
         self.gender = gender
         self.weight = weight
         self.height = height
@@ -28,7 +31,10 @@ class Dog(BaseModel, db.Model):
     def update(self, name, bread, birth, gender, weight, height):
         self.name = name
         self.bread = bread
-        self.birth = datetime.strptime(birth, "%d/%m/%Y")
+        try:
+            self.birth = datetime.strptime(birth, "%d/%m/%Y")
+        except:
+            self.birth = datetime.now()
         self.gender = gender
         self.weight = weight
         self.height = height
@@ -36,7 +42,7 @@ class Dog(BaseModel, db.Model):
     def jsonOutput(self):
         return {
             'id': self.id ,'name' : self.name, 'bread': self.bread, 
-            'birth' : self.birth.strftime("%d/%m/%Y"), 
+            'birth' : self.birth.timestamp() * 1000,
             'gender' : self.gender, 
             'weight': self.weight, 
             'height' : self.height,

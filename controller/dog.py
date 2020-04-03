@@ -89,7 +89,10 @@ class DogManage(Resource):
         data = getParserDog().parse_args()
 
         dog = Dog(**data)
-        dog.save_to_db()
+        try:
+            dog.save_to_db()
+        except:
+            return {'message' : "No se ha podido crear el canino"}, 500
 
         return dog.jsonOutput(), 201
 
