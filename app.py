@@ -10,7 +10,7 @@ from os import environ
 # Imports
 from controller.user import UserRegister, UserLogin
 from controller.dog import DogController, DogListController, DogObservationController, DogImage, DogManage, DogFindByName, DogListWithParamsController, DogCount
-from controller.session import SessionController, SessionManage
+from controller.session import SessionController, SessionManage, SessionsDogs, SessionsDogsByName
 from controller.toma import TomaController, TomaManage, TomaManageSensors, TomaManageVideo, TomaGetVideo
 
 app = Flask(__name__)
@@ -41,6 +41,9 @@ api.add_resource(DogObservationController, '/observation/dog')
 api.add_resource(DogImage, '/dog/image/<string:id>')
 
 api.add_resource(SessionController, '/dog/session/<string:id>')
+api.add_resource(SessionsDogs, '/dog/sessions/<string:id>/<string:orderby>/<string:sortby>')
+api.add_resource(SessionsDogsByName, '/dog/sessions/<string:id>/<string:name>/<string:orderby>/<string:sortby>')
+
 api.add_resource(SessionManage, '/dog/session/manage')
 
 api.add_resource(TomaController, '/dog/toma/<string:id>')

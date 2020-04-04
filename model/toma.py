@@ -18,6 +18,7 @@ class Toma(BaseModel, db.Model):
     sensor_data_back = db.Column(db.String(255),  nullable = True)
 
     def __init__(self, name, session_id, conclusion_ia = "", conclusion_expert = ""):
+        super(Toma, self).__init__()
         self.name = name
         self._session_id = session_id
         self.conclusion_ia = conclusion_ia
@@ -41,6 +42,8 @@ class Toma(BaseModel, db.Model):
             'session_id' : self._session_id,
             'conclusion_ia' : self.conclusion_ia,
             'conclusion_expert' : self.conclusion_expert,
+            'created_at': self.created_at.timestamp() * 1000,
+            'updated_at': self.updated_at.timestamp() * 1000,
             'video_front' : self.video_front,
             'video_middle' : self.video_middle,
             'video_back' : self.video_back,

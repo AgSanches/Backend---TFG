@@ -20,7 +20,7 @@ class Dog(BaseModel, db.Model):
         self.name = name
         self.bread = bread
         try:
-            self.birth = datetime.strptime(birth, "%d/%m/%Y")
+            self.birth = datetime.strptime(birth, "%Y/%m/%d")
         except:
             self.birth = datetime.now()
         self.gender = gender
@@ -32,7 +32,7 @@ class Dog(BaseModel, db.Model):
         self.name = name
         self.bread = bread
         try:
-            self.birth = datetime.strptime(birth, "%d/%m/%Y")
+            self.birth = datetime.strptime(birth, "%Y/%m/%d")
         except:
             self.birth = datetime.now()
         self.gender = gender
@@ -45,6 +45,18 @@ class Dog(BaseModel, db.Model):
             'birth' : self.birth.timestamp() * 1000,
             'gender' : self.gender, 
             'weight': self.weight, 
+            'height' : self.height,
+            'photo_path' : self.photo_path,
+            'created_at': self.created_at.timestamp() * 1000,
+            'updated_at': self.updated_at.timestamp() * 1000,
+            }
+
+    def jsonOutputComplete(self):
+        return {
+            'id': self.id ,'name' : self.name, 'bread': self.bread,
+            'birth' : self.birth.timestamp() * 1000,
+            'gender' : self.gender,
+            'weight': self.weight,
             'height' : self.height,
             'photo_path' : self.photo_path,
             'created_at': self.created_at.timestamp() * 1000,
@@ -74,7 +86,7 @@ class Dog(BaseModel, db.Model):
         return cls.addParamsQuery(query, limit, orderby, sortby)
 
     @classmethod
-    def getDogs(cls, limit = 100, orderby = 'updated_at', sortby='desc', offset = 0):
+    def getDogs(cls, limit = 10000, orderby = 'updated_at', sortby='desc', offset = 0):
 
         query = cls.addParamsQuery(cls.query, limit, orderby, offset)
 

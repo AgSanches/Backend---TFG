@@ -91,3 +91,25 @@ class SessionController(Resource):
             return {'message' : 'No se ha podido eliminar la sesión'}, 500
 
         return { 'message':"Sesión eliminada correctamente" }
+
+class SessionsDogs(Resource):
+
+    def get(self, id, orderby, sortby):
+
+        if not Dog.getDogById(id):
+            return {'message': 'El perro no existe'}, 404
+
+        sessions = Session.getAllSessionsByDog(id, orderby, sortby)
+
+        return [session.jsonOutput() for session in sessions]
+
+class SessionsDogsByName(Resource):
+
+    def get(self, id, name, orderby, sortby):
+
+        if not Dog.getDogById(id):
+            return {'message': 'El perro no existe'}, 404
+
+        sessions = Session.getSessionsByName(name, id, orderby, sortby)
+
+        return [session.jsonOutput() for session in sessions]
