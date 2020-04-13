@@ -76,7 +76,7 @@ class SessionController(Resource):
                 'message': 'No se ha encontrado ninguna sesión con este id: {}'.format(id)
                 }, 404
 
-        return session.jsonOutput()
+        return session.jsonOutputComplete()
 
     def delete(self, id):
 

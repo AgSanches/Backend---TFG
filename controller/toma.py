@@ -123,7 +123,6 @@ class TomaController(Resource):
 
         return {'message' : 'Toma eliminada'}
 
-
 class TomaGetVideo(Resource):
 
     def get(self, id, name):
@@ -238,3 +237,14 @@ class TomaManageSensors(Resource):
             return {'message': "Ha ocurrido un problema al almacenar los datos, vuelva a intentarlo"},500
         
         return toma.jsonOutput()
+
+class TomaByName(Resource):
+
+    def get(self, id, name):
+
+        if not Session.getSessionById(id):
+            return {'message': "No existe ninguna sesión con id {}".format(id)}, 404
+
+        return {
+            'tomas' : [toma.jsonOutput() for toma in Toma.getTomaByName(name, id)]
+        }

@@ -11,7 +11,7 @@ from os import environ
 from controller.user import UserRegister, UserLogin
 from controller.dog import DogController, DogListController, DogObservationController, DogImage, DogManage, DogFindByName, DogListWithParamsController, DogCount
 from controller.session import SessionController, SessionManage, SessionsDogs, SessionsDogsByName
-from controller.toma import TomaController, TomaManage, TomaManageSensors, TomaManageVideo, TomaGetVideo
+from controller.toma import TomaController, TomaManage, TomaManageSensors, TomaManageVideo, TomaGetVideo, TomaByName
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -47,6 +47,7 @@ api.add_resource(SessionsDogsByName, '/dog/sessions/<string:id>/<string:name>/<s
 api.add_resource(SessionManage, '/dog/session/manage')
 
 api.add_resource(TomaController, '/dog/toma/<string:id>')
+api.add_resource(TomaByName, '/dog/toma/<string:id>/<string:name>')
 api.add_resource(TomaManage, '/dog/toma/manage')
 
 api.add_resource(TomaManageVideo, '/dog/toma/video/upload/<string:id>')
