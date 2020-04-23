@@ -27,7 +27,7 @@ api = Api(app)
 
 jwt = JWTManager(app)
 
-api.add_resource(UserRegister, '/register')
+api.add_resource(UserRegister, '/user')
 api.add_resource(UserController, '/user/<string:id>')
 api.add_resource(UserList, '/users')
 api.add_resource(UserLogin, '/login')
