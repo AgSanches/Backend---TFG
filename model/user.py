@@ -18,12 +18,17 @@ class User(BaseModel, db.Model):
 
     def jsonOutput(self):
         return {
+            'id': self.id,
             'name' : self.name,
             'surname' : self.surname,
             'email' : self.email,
-            'password' : self.password
+            'created_at': self.created_at.timestamp() * 1000,
         }
 
     @classmethod
     def findUserByEmail(cls, email):
         return cls.query.filter_by( email = email ).first()
+
+    @classmethod
+    def findUserById(cls, id):
+        return cls.query.filter_by( id = id).first()

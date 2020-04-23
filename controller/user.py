@@ -74,3 +74,14 @@ class UserLogin(Resource):
             }, 200
 
         return {'message' : 'Credenciales no válidas'}, 401
+
+class UserController(Resource):
+
+    def get(self, id):
+
+        user = User.findUserById(id)
+
+        if not user:
+            return { message: "Usuario no existente" }, 404
+
+        return user.jsonOutput()
