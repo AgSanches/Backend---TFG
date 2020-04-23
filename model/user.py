@@ -32,3 +32,7 @@ class User(BaseModel, db.Model):
     @classmethod
     def findUserById(cls, id):
         return cls.query.filter_by( id = id).first()
+
+    @classmethod
+    def getUsers(cls):
+        return cls.query.all()

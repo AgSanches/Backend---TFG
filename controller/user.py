@@ -85,3 +85,11 @@ class UserController(Resource):
             return { message: "Usuario no existente" }, 404
 
         return user.jsonOutput()
+
+class UserList(Resource):
+
+    def get(self):
+
+        users = User.getUsers()
+
+        return [user.jsonOutput() for user in users]

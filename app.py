@@ -8,7 +8,7 @@ from files import UPLOAD_FOLDER
 from os import environ
 
 # Imports
-from controller.user import UserRegister, UserLogin, UserController
+from controller.user import UserRegister, UserLogin, UserController, UserList
 from controller.dog import DogController, DogListController, DogObservationController, DogImage, DogManage, DogFindByName, DogListWithParamsController, DogCount
 from controller.session import SessionController, SessionManage, SessionsDogs, SessionsDogsByName
 from controller.toma import TomaController, TomaManage, TomaManageSensors, TomaManageVideo, TomaGetVideo, TomaByName
@@ -29,6 +29,7 @@ jwt = JWTManager(app)
 
 api.add_resource(UserRegister, '/register')
 api.add_resource(UserController, '/user/<string:id>')
+api.add_resource(UserList, '/users')
 api.add_resource(UserLogin, '/login')
 
 api.add_resource(DogController, '/dog/<string:id>',)
