@@ -68,7 +68,6 @@ class UserLogin(Resource):
                 'name' : user.name,
                 'surname' : user.surname,
                 'email': user.email,
-                'password': '',
                 'access_token' : access_token,
                 'refresh_token' : refresh_token
             }, 200
@@ -93,3 +92,29 @@ class UserList(Resource):
         users = User.getUsers()
 
         return [user.jsonOutput() for user in users]
+
+class UserPassword(Resource):
+
+    def put(self, id):
+        password_parser = reqparse.RequestParser()
+
+        password_parser.add_argument('password',
+            type=str, required=True,
+            help="La contraseña se encuentra vacía")
+
+        user = User.findUserById(id)
+
+        if not user:
+            return { message: "Usuario no existente" }, 404
+
+        password = password_parser.parse_args()['password']
+        user.password = generate_password_hash(password, method='pbkdf2:sha256')
+
+        try:
+            user.save_to_db()
+        except:
+            return {'message': 'No se ha podido actualizar la '
+                               'contraseña, vuelva a intentarlo más tarde'}, 500
+        return {
+            'message' : "Contraseña cambiada con éxito."
+        }, 200
