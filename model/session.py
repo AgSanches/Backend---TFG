@@ -50,32 +50,16 @@ class Session(BaseModel, db.Model):
         }
 
     @classmethod
-    def addParamsQuery(cls, query, orderby, sortby):
-
-        if orderby == 'updated_at':
-            if sortby == 'asc':
-                query = query.order_by(db.asc(cls.updated_at))
-            else:
-                query = query.order_by(db.desc(cls.updated_at))
-        else:
-            if sortby == 'asc':
-                query = query.order_by(db.asc(cls.name))
-            else:
-                query = query.order_by(db.desc(cls.name))
-
-        return query
-
-    @classmethod
     def getSessionById(cls, id):
         return cls.query.filter_by(id = id).first()
 
     @classmethod
-    def getAllSessionsByDog(cls, dog_id, orderby = 'updated_at', sortby = "desc"):
+    def getAllSessionsByDog(cls, dog_id):
         query = cls.query.filter_by(_dog_id = dog_id)
-        return cls.addParamsQuery(query, orderby, sortby).all()
+        return query.all()
 
     @classmethod
-    def getSessionsByName(cls, name, dog_id, orderby = 'updated_at', sortby='desc'):
+    def getSessionsByName(cls, name, dog_id):
         search = "%{}%".format(name)
         query = cls.query.filter_by(_dog_id = dog_id).filter(cls.name.like(search))
-        return cls.addParamsQuery(query, orderby, sortby).all()
+        return query.all()

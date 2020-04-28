@@ -3,7 +3,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, create_refresh_token 
 from model.user import User
 
-
 def getParser():
     _user_parser = reqparse.RequestParser()
 
@@ -90,8 +89,7 @@ class UserController(Resource):
         user_parser = getParser()
 
         user_parser.add_argument('name',
-        type=str, required=True,
-                                  help="Nombre vacío")
+        type=str, required=True, help="Nombre vacío")
 
         user_parser.add_argument('surname',
                                   type=str, required=True,

@@ -9,7 +9,7 @@ from os import environ
 
 # Imports
 from controller.user import UserRegister, UserLogin, UserController, UserList, UserPassword
-from controller.dog import DogController, DogListController, DogObservationController, DogImage, DogManage, DogFindByName, DogListWithParamsController, DogCount
+from controller.dog import DogController, DogListController, DogObservationController, DogImage, DogManage, DogFindByName
 from controller.session import SessionController, SessionManage, SessionsDogs, SessionsDogsByName
 from controller.toma import TomaController, TomaManage, TomaManageSensors, TomaManageVideo, TomaGetVideo, TomaByName
 
@@ -36,16 +36,14 @@ api.add_resource(UserPassword, '/user/change-password/<string:id>')
 api.add_resource(DogController, '/dog/<string:id>',)
 api.add_resource(DogFindByName, '/dog/name/<string:name>',)
 api.add_resource(DogManage, '/dog',)
-api.add_resource(DogCount, '/count/dog',)
 
-api.add_resource(DogListWithParamsController, '/dogs/<int:limit>/<string:order>/<string:method>/<int:offset>')
 api.add_resource(DogListController, '/dogs')
 api.add_resource(DogObservationController, '/observation/dog')
 api.add_resource(DogImage, '/dog/image/<string:id>')
 
 api.add_resource(SessionController, '/dog/session/<string:id>')
-api.add_resource(SessionsDogs, '/dog/sessions/<string:id>/<string:orderby>/<string:sortby>')
-api.add_resource(SessionsDogsByName, '/dog/sessions/<string:id>/<string:name>/<string:orderby>/<string:sortby>')
+api.add_resource(SessionsDogs, '/dog/sessions/<string:id>')
+api.add_resource(SessionsDogsByName, '/dog/sessions/<string:id>/<string:name>')
 
 api.add_resource(SessionManage, '/dog/session/manage')
 

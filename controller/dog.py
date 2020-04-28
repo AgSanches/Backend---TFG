@@ -4,7 +4,6 @@ from model.dog import Dog, DogObservation
 import werkzeug
 from files import allowed_photo, save_file, delete_file, returnDefaultPhoto, checkFileExists, getFile
 
-
 def getParserDog():
     dog_parser = reqparse.RequestParser()
 
@@ -34,7 +33,6 @@ def getParserDog():
 
     return dog_parser
 
-
 def getParserObservation():
     observation_parser = reqparse.RequestParser()
 
@@ -43,7 +41,6 @@ def getParserObservation():
                                     help="La observación se encuentra vacía")
 
     return observation_parser
-
 
 class DogController(Resource):
 
@@ -74,13 +71,6 @@ class DogFindByName(Resource):
     def get(self, name):
         dogs = Dog.getDogsByName(name)
         return [dog.jsonOutput() for dog in dogs]
-
-class DogCount(Resource):
-
-    def get(self):
-        dogs = len(Dog.getDogsCount())
-        return {'count': dogs}
-
 
 class DogManage(Resource):
 
@@ -122,19 +112,11 @@ class DogManage(Resource):
 
         return dog.jsonOutput()
 
-
 class DogListController(Resource):
 
     def get(self):
         data = Dog.getDogs()
         return [dog.jsonOutput() for dog in data]
-
-class DogListWithParamsController(Resource):
-
-    def get(self, limit, order, method, offset):
-        data = Dog.getDogs(limit = limit, offset = offset, orderby = order, sortby = method)
-        return [dog.jsonOutput() for dog in data]
-
 
 class DogObservationController(Resource):
 
@@ -175,7 +157,6 @@ class DogObservationController(Resource):
             return {'message': "No se ha podido actualizar"}, 500
 
         return observation.jsonOutput()
-
 
 class DogImage(Resource):
 

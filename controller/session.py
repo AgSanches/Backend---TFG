@@ -94,12 +94,12 @@ class SessionController(Resource):
 
 class SessionsDogs(Resource):
 
-    def get(self, id, orderby, sortby):
+    def get(self, id):
 
         if not Dog.getDogById(id):
             return {'message': 'El perro no existe'}, 404
 
-        sessions = Session.getAllSessionsByDog(id, orderby, sortby)
+        sessions = Session.getAllSessionsByDog(id)
 
         return [session.jsonOutput() for session in sessions]
 
