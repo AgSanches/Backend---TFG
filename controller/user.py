@@ -3,34 +3,34 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, create_refresh_token 
 from model.user import User
 
-_user_parser  = reqparse.RequestParser()
 
-_user_parser.add_argument('email', 
-type=str, required=True, 
-help="El email se encuentra vacío")
+def getParser():
+    _user_parser = reqparse.RequestParser()
 
-_user_parser.add_argument('password', 
-type=str, required=True, 
-help="La contraseña se encuentra vacía")
+    _user_parser.add_argument('email',
+                              type=str, required=True,
+                              help="El email se encuentra vacío")
 
-_user_parser.add_argument('name', 
-type=str, required=False, 
-help="Nombre vacío")
-
-_user_parser.add_argument('surname', 
-type=str, required=False, 
-help="Apellido vacío")
+    _user_parser.add_argument('password',
+                              type=str, required=True,
+                              help="La contraseña se encuentra vacía")
+    return _user_parser
 
 class UserRegister(Resource):
 
     def post(self):
 
-        data = _user_parser.parse_args()
+        user_parser = getParser()
 
-        if data['name'] == '' or data['surname'] == '':
-            return {
-                'message' : 'Nombre o apellido no válido'
-                }, 400
+        user_parser.add_argument('name',
+        type=str, required=True,
+                                  help="Nombre vacío")
+
+        user_parser.add_argument('surname',
+                                  type=str, required=True,
+                                  help="Apellido vacío")
+
+        data = user_parser.parse_args()
 
         if User.findUserByEmail(data['email']):
             return {
@@ -38,9 +38,9 @@ class UserRegister(Resource):
                 }, 400
 
         user = User(
-            data['name'], 
-            data['surname'], 
-            data['email'], 
+            data['name'],
+            data['surname'],
+            data['email'],
             generate_password_hash(data['password'],method='pbkdf2:sha256')
             )
 
@@ -55,7 +55,7 @@ class UserLogin(Resource):
 
     def post(self):
 
-        data = _user_parser.parse_args()
+        data = getParser().parse_args()
 
         user = User.findUserByEmail(data['email'])
 
@@ -85,6 +85,39 @@ class UserController(Resource):
 
         return user.jsonOutput()
 
+    def put(self, id):
+
+        user_parser = getParser()
+
+        user_parser.add_argument('name',
+        type=str, required=True,
+                                  help="Nombre vacío")
+
+        user_parser.add_argument('surname',
+                                  type=str, required=True,
+                                  help="Apellido vacío")
+
+        data = user_parser.parse_args()
+
+        user = User.findUserById(id)
+
+        if not user:
+            return { message: "Usuario no existente" }, 404
+
+        if data['email'] != user.email and User.findUserByEmail(data['email']):
+            return { 'message' : 'Email no válido, pruebe otra dirección de correo' }, 400
+
+        user.update(**data)
+
+        try:
+            user.save_to_db()
+        except:
+            return {'message': 'No se ha podido actualizar el usuario, vuelva a intentarlo más tarde'}, 500
+
+        return {
+                    "user": user.jsonOutput()
+               }, 200
+
 class UserList(Resource):
 
     def get(self):
@@ -94,7 +127,6 @@ class UserList(Resource):
         return [user.jsonOutput() for user in users]
 
 class UserPassword(Resource):
-
     def put(self, id):
         password_parser = reqparse.RequestParser()
 

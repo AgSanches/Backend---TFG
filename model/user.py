@@ -11,6 +11,9 @@ class User(BaseModel, db.Model):
 
     def __init__(self, name, surname, email, password):
         BaseModel.__init__(self)
+        self.update(name, surname, email, password)
+
+    def update(self, name, surname, email, password):
         self.name = name
         self.surname = surname
         self.email = email
