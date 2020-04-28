@@ -1,4 +1,5 @@
 from model.base import BaseModel, db
+
 class User(BaseModel, db.Model):
 
     __tablename__ = 'users'
@@ -10,13 +11,13 @@ class User(BaseModel, db.Model):
 
     def __init__(self, name, surname, email, password):
         BaseModel.__init__(self)
-        self.update(name, surname, email, password)
+        self.update(name, surname, email)
+        self.password = password
 
-    def update(self, name, surname, email, password):
+    def update(self, name, surname, email):
         self.name = name
         self.surname = surname
         self.email = email
-        self.password = password
 
     def jsonOutput(self):
         return {
