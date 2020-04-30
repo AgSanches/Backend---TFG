@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 
 ALLOWED_PHOTOS = {'png', 'jpg', 'jpeg'}
 ALLOWED_VIDEOS = {'mp4', 'mp3'}
-ALLOWED_SENSORS = {'csv'}
+ALLOWED_SENSORS = {'csv', 'txt'}
 UPLOAD_FOLDER = './uploads'
 
 def returnDefaultPhoto():
