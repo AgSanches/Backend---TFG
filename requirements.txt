@@ -4,4 +4,5 @@ Flask-JWT-Extended
 Flask-SQLAlchemy
 flask-cors
 marshmallow-sqlalchemy
+pandas
 uwsgi

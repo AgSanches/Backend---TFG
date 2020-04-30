@@ -4,6 +4,7 @@ from model.toma import Toma
 from flask import send_file
 import werkzeug
 from files import allowed_video,save_file, allowed_sensors, checkFileExists, getFile
+import pandas as pd
 
 def getTomaParser():
 
@@ -197,7 +198,7 @@ class TomaManageVideo(Resource):
         return toma.jsonOutput()
 
 class TomaManageSensors(Resource):
-    
+
     def post(self, id):
         file_parser = reqparse.RequestParser()
 
@@ -247,4 +248,41 @@ class TomaByName(Resource):
 
         return {
             'tomas' : [toma.jsonOutput() for toma in Toma.getTomaByName(name, id)]
+        }
+
+class TomaReadSensors(Resource):
+
+    def get(self, id):
+
+        toma = Toma.getTomaById(id)
+
+        if toma is None:
+            return {'message' : "La toma no existe"}, 404
+
+        data = {}
+
+        try:
+            front_data = pd.read_csv(
+                getFile(toma.getFolder(), toma.sensor_data_front),
+                skiprows=4,
+                sep="\t"
+            )
+
+            data['front_data'] = list(front_data['Roll'])
+        except FileNotFoundError:
+            data['front_data'] = []
+
+        try:
+            front_data = pd.read_csv(
+                getFile(toma.getFolder(), toma.sensor_data_back),
+                skiprows=4,
+                sep="\t"
+            )
+
+            data['back_data'] = list(front_data['Roll'])
+        except FileNotFoundError:
+            data['back_data'] = []
+
+        return {
+            "data": data
         }
