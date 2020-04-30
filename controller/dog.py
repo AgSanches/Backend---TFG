@@ -3,6 +3,7 @@ from flask import send_file
 from model.dog import Dog, DogObservation
 import werkzeug
 from files import allowed_photo, save_file, delete_file, returnDefaultPhoto, checkFileExists, getFile
+from flask_jwt_extended import jwt_required
 
 def getParserDog():
     dog_parser = reqparse.RequestParser()
@@ -44,6 +45,7 @@ def getParserObservation():
 
 class DogController(Resource):
 
+    @jwt_required
     def get(self, id):
 
         dog = Dog.getDogById(id)
@@ -53,6 +55,7 @@ class DogController(Resource):
 
         return {'message': 'Perro no encontrado'}, 404
 
+    @jwt_required
     def delete(self, id):
 
         dog = Dog.getDogById(id)
@@ -68,12 +71,14 @@ class DogController(Resource):
 
 class DogFindByName(Resource):
 
+    @jwt_required
     def get(self, name):
         dogs = Dog.getDogsByName(name)
         return [dog.jsonOutput() for dog in dogs]
 
 class DogManage(Resource):
 
+    @jwt_required
     def post(self):
 
         data = getParserDog().parse_args()
@@ -86,6 +91,7 @@ class DogManage(Resource):
 
         return dog.jsonOutput(), 201
 
+    @jwt_required
     def put(self):
 
         dog_parser = getParserDog()
@@ -114,12 +120,14 @@ class DogManage(Resource):
 
 class DogListController(Resource):
 
+    @jwt_required
     def get(self):
         data = Dog.getDogs()
         return [dog.jsonOutput() for dog in data]
 
 class DogObservationController(Resource):
 
+    @jwt_required
     def post(self):
 
         observation_parser = getParserObservation()
@@ -138,6 +146,7 @@ class DogObservationController(Resource):
 
         return observation.jsonOutput(), 201
 
+    @jwt_required
     def put(self):
         observation_parser = getParserObservation()
         observation_parser.add_argument('observation_id',
@@ -172,6 +181,7 @@ class DogImage(Resource):
 
         return send_file(getFile(dog.folderOutput(), dog.photo_path))
 
+    @jwt_required
     def post(self, id):
 
         file_parser = reqparse.RequestParser()
@@ -202,6 +212,7 @@ class DogImage(Resource):
         dog.save_to_db()
         return dog.jsonOutput()
 
+    @jwt_required
     def delete(self, id):
 
         dog = Dog.getDogById(id)

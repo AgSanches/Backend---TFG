@@ -260,8 +260,6 @@ class TomaReadSensors(Resource):
             return {'message' : "La toma no existe"}, 404
 
         data = {}
-        min_range = 0
-
         try:
             front_data = pd.read_csv(
                 getFile(toma.getFolder(), toma.sensor_data_front),
