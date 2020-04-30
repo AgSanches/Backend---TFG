@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, create_refresh_token 
 from model.user import User
+from flask_jwt_extended import jwt_required
 
 def getParserLogin():
     _user_parser = reqparse.RequestParser()
@@ -16,7 +17,6 @@ def getParserLogin():
 
     return _user_parser
 
-
 def getParserUser():
 
     _user_parser = getParserUpdate()
@@ -26,7 +26,6 @@ def getParserUser():
                              help="La contraseña se encuentra vacía")
 
     return _user_parser
-
 
 def getParserUpdate():
 
@@ -46,9 +45,9 @@ def getParserUpdate():
 
     return _user_parser
 
-
 class UserRegister(Resource):
 
+    @jwt_required
     def post(self):
 
         user_parser = getParserUser()
@@ -99,6 +98,7 @@ class UserLogin(Resource):
 
 class UserController(Resource):
 
+    @jwt_required
     def get(self, id):
 
         user = User.findUserById(id)
@@ -108,6 +108,7 @@ class UserController(Resource):
 
         return user.jsonOutput()
 
+    @jwt_required
     def put(self, id):
 
         user_parser = getParserUpdate()
@@ -131,6 +132,7 @@ class UserController(Resource):
 
         return user.jsonOutput(), 200
 
+    @jwt_required
     def delete(self, id):
 
         user = User.findUserById(id)
@@ -147,6 +149,7 @@ class UserController(Resource):
 
 class UserList(Resource):
 
+    @jwt_required
     def get(self):
 
         users = User.getUsers()
@@ -155,6 +158,7 @@ class UserList(Resource):
 
 class UserPassword(Resource):
 
+    @jwt_required
     def put(self, id):
         password_parser = reqparse.RequestParser()
 
