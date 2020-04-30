@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 from model.session import Session
 from model.dog import Dog
+from flask_jwt_extended import jwt_required
 
 def getSessionParser():
     session_parser  = reqparse.RequestParser()
@@ -19,6 +20,7 @@ def getSessionParser():
 
 class SessionManage(Resource):
 
+    @jwt_required
     def post(self):
 
         session_parser  = getSessionParser()
@@ -41,6 +43,7 @@ class SessionManage(Resource):
 
         return session.jsonOutput()
 
+    @jwt_required
     def put(self):
 
         session_parser  = getSessionParser()
@@ -67,6 +70,7 @@ class SessionManage(Resource):
 
 class SessionController(Resource):
 
+    @jwt_required
     def get(self, id):
 
         session = Session.getSessionById(id)
@@ -78,6 +82,7 @@ class SessionController(Resource):
 
         return session.jsonOutputComplete()
 
+    @jwt_required
     def delete(self, id):
 
         session = Session.getSessionById(id)
@@ -94,6 +99,7 @@ class SessionController(Resource):
 
 class SessionsDogs(Resource):
 
+    @jwt_required
     def get(self, id):
 
         if not Dog.getDogById(id):
@@ -105,11 +111,12 @@ class SessionsDogs(Resource):
 
 class SessionsDogsByName(Resource):
 
-    def get(self, id, name, orderby, sortby):
+    @jwt_required
+    def get(self, id, name):
 
         if not Dog.getDogById(id):
             return {'message': 'El perro no existe'}, 404
 
-        sessions = Session.getSessionsByName(name, id, orderby, sortby)
+        sessions = Session.getSessionsByName(name, id)
 
         return [session.jsonOutput() for session in sessions]
