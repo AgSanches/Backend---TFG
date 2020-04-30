@@ -260,6 +260,7 @@ class TomaReadSensors(Resource):
             return {'message' : "La toma no existe"}, 404
 
         data = {}
+        min_range = 0
 
         try:
             front_data = pd.read_csv(
@@ -283,6 +284,9 @@ class TomaReadSensors(Resource):
         except FileNotFoundError:
             data['back_data'] = []
 
+        min_range = min(len(data['front_data']), len(data['back_data']))
+
         return {
+            "labels": [i+1 for i in range(min_range)],
             "data": data
         }
