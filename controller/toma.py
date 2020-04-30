@@ -5,6 +5,7 @@ from flask import send_file
 import werkzeug
 from files import allowed_video,save_file, allowed_sensors, checkFileExists, getFile
 import pandas as pd
+from flask_jwt_extended import jwt_required
 
 def getTomaParser():
 
@@ -49,6 +50,7 @@ def manageDataToma(data, toma, allowed_item):
     
 class TomaManage(Resource):
 
+    @jwt_required
     def post(self):
 
         toma_parser = getTomaParser()
@@ -60,7 +62,7 @@ class TomaManage(Resource):
         data = toma_parser.parse_args()
 
         if not Session.getSessionById(data['session_id']):
-            return {"message" : "Sesión no existente"},404
+            return {"message" : "Sesión no existente"}, 404
 
         toma = Toma(**data)
         
@@ -71,6 +73,7 @@ class TomaManage(Resource):
 
         return toma.jsonOutput()
 
+    @jwt_required
     def put(self):
 
         toma_parser = getTomaParser()
@@ -96,7 +99,8 @@ class TomaManage(Resource):
         return toma.jsonOutput()
 
 class TomaController(Resource):
-    
+
+    @jwt_required
     def get(self, id):
 
         toma = Toma.getTomaById(id)
@@ -108,6 +112,7 @@ class TomaController(Resource):
 
         return toma.jsonOutput()
 
+    @jwt_required
     def delete(self, id):
 
         toma = Toma.getTomaById(id)
@@ -126,6 +131,7 @@ class TomaController(Resource):
 
 class TomaGetVideo(Resource):
 
+    @jwt_required
     def get(self, id, name):
 
         if name not in ['front', 'middle', 'back']:
@@ -150,6 +156,7 @@ class TomaGetVideo(Resource):
 
 class TomaManageVideo(Resource):
 
+    @jwt_required
     def post(self, id):
 
         file_parser = reqparse.RequestParser()
@@ -199,6 +206,7 @@ class TomaManageVideo(Resource):
 
 class TomaManageSensors(Resource):
 
+    @jwt_required
     def post(self, id):
         file_parser = reqparse.RequestParser()
 
@@ -241,6 +249,7 @@ class TomaManageSensors(Resource):
 
 class TomaByName(Resource):
 
+    @jwt_required
     def get(self, id, name):
 
         if not Session.getSessionById(id):
@@ -252,6 +261,7 @@ class TomaByName(Resource):
 
 class TomaReadSensors(Resource):
 
+    @jwt_required
     def get(self, id):
 
         toma = Toma.getTomaById(id)
