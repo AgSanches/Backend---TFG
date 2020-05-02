@@ -69,6 +69,28 @@ class DogController(Resource):
 
         return {'message': 'Perro correctamente eliminado'}
 
+    @jwt_required
+    def put(self, id):
+
+        dog_parser = getParserDog()
+
+        data = dog_parser.parse_args()
+
+        dog = Dog.getDogById(id)
+
+        if not dog:
+            return {'message': 'Perro no existente'}, 404
+
+        dog.update(**data)
+
+        try:
+            dog.save_to_db()
+        except:
+            return {
+                       'message': "Ha ocurrido un problema al actualizar el perro, vuelva a intentarlo en otro momento"}, 500
+
+        return dog.jsonOutput()
+
 class DogFindByName(Resource):
 
     @jwt_required
@@ -90,33 +112,6 @@ class DogManage(Resource):
             return {'message' : "No se ha podido crear el canino"}, 500
 
         return dog.jsonOutput(), 201
-
-    @jwt_required
-    def put(self):
-
-        dog_parser = getParserDog()
-
-        dog_parser.add_argument('dog_id',
-                                type=str, required=True,
-                                help="Elige un perro que editar")
-
-        data = dog_parser.parse_args()
-
-        dog = Dog.getDogById(data['dog_id'])
-
-        if not dog:
-            return {'message': 'Perro no existente'}, 404
-
-        del data['dog_id']
-        dog.update(**data)
-
-        try:
-            dog.save_to_db()
-        except:
-            return {
-                       'message': "Ha ocurrido un problema al actualizar el perro, vuelva a intentarlo en otro momento"}, 500
-
-        return dog.jsonOutput()
 
 class DogListController(Resource):
 
