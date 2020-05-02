@@ -131,7 +131,6 @@ class TomaController(Resource):
 
 class TomaGetVideo(Resource):
 
-    @jwt_required
     def get(self, id, name):
 
         if name not in ['front', 'middle', 'back']:
