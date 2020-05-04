@@ -8,11 +8,13 @@ class User(BaseModel, db.Model):
     surname = db.Column(db.String(255), nullable = False)
     email = db.Column(db.String(255), unique = True)
     password = db.Column(db.String(255), nullable = False)
+    role = db.Column(db.Integer)
 
-    def __init__(self, name, surname, email, password):
+    def __init__(self, name, surname, email, password, role):
         BaseModel.__init__(self)
         self.update(name, surname, email)
         self.password = password
+        self.role = role
 
     def update(self, name, surname, email):
         self.name = name
@@ -25,6 +27,7 @@ class User(BaseModel, db.Model):
             'name' : self.name,
             'surname' : self.surname,
             'email' : self.email,
+            'role': self.role,
             'created_at': self.created_at.timestamp() * 1000,
         }
 

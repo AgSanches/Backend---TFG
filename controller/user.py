@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, create_refresh_token 
 from model.user import User
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_current_user, get_jwt_claims
 
 def getParserLogin():
     _user_parser = reqparse.RequestParser()
@@ -50,6 +50,11 @@ class UserRegister(Resource):
     @jwt_required
     def post(self):
 
+        claims = get_jwt_claims()
+
+        if not claims['isAdmin'] :
+            return {"message": "No está autorizado"},  401
+
         user_parser = getParserUser()
 
         data = user_parser.parse_args()
@@ -63,7 +68,8 @@ class UserRegister(Resource):
             data['name'],
             data['surname'],
             data['email'],
-            generate_password_hash(data['password'],method='pbkdf2:sha256')
+            generate_password_hash(data['password'],method='pbkdf2:sha256'),
+            2
             )
 
         try:
@@ -90,6 +96,7 @@ class UserLogin(Resource):
                 'name' : user.name,
                 'surname' : user.surname,
                 'email': user.email,
+                'role': user.role,
                 'access_token' : access_token,
                 'refresh_token' : refresh_token
             }, 200
@@ -101,6 +108,11 @@ class UserController(Resource):
     @jwt_required
     def get(self, id):
 
+        claims = get_jwt_claims()
+
+        if not claims['isAdmin']:
+            return {"message": "No está autorizado"}, 401
+
         user = User.findUserById(id)
 
         if not user:
@@ -110,6 +122,11 @@ class UserController(Resource):
 
     @jwt_required
     def put(self, id):
+
+        claims = get_jwt_claims()
+
+        if not claims['isAdmin']:
+            return {"message": "No está autorizado"}, 401
 
         user_parser = getParserUpdate()
 
@@ -135,6 +152,11 @@ class UserController(Resource):
     @jwt_required
     def delete(self, id):
 
+        claims = get_jwt_claims()
+
+        if not claims['isAdmin']:
+            return {"message": "No está autorizado"}, 401
+
         user = User.findUserById(id)
 
         if not user:
@@ -151,6 +173,10 @@ class UserList(Resource):
 
     @jwt_required
     def get(self):
+        claims = get_jwt_claims()
+
+        if not claims['isAdmin']:
+            return {"message": "No está autorizado"}, 401
 
         users = User.getUsers()
 
@@ -160,6 +186,12 @@ class UserPassword(Resource):
 
     @jwt_required
     def put(self, id):
+
+        claims = get_jwt_claims()
+
+        if not claims['isAdmin']:
+            return {"message": "No está autorizado"}, 401
+
         password_parser = reqparse.RequestParser()
 
         password_parser.add_argument('password',
