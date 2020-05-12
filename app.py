@@ -32,6 +32,7 @@ def addClaimsJwt(identity):
     user = User.findUserById(identity)
     if not user or user.role != 1:
         return {'isAdmin': False}
+
     return {'isAdmin': True}
 
 api.add_resource(UserRegister, '/user')

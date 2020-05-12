@@ -9,6 +9,7 @@ class Toma(BaseModel, db.Model):
     _session_id = db.Column(db.Integer, db.ForeignKey('sessions.id'), nullable = False)
     conclusion_ia = db.Column(db.String(255), nullable = True)
     conclusion_expert = db.Column(db.String(255), nullable = True)
+    type = db.Column(db.Integer, nullable = False) #1 - Check lame, 2 Calculate Angles
 
     video_front = db.Column(db.String(255), nullable = True)
     video_middle = db.Column(db.String(255), nullable = True)
@@ -17,10 +18,11 @@ class Toma(BaseModel, db.Model):
     sensor_data_front = db.Column(db.String(255), nullable = True)
     sensor_data_back = db.Column(db.String(255),  nullable = True)
 
-    def __init__(self, name, session_id, conclusion_ia = "", conclusion_expert = ""):
+    def __init__(self, name, session_id, type, conclusion_ia = "", conclusion_expert = ""):
         super(Toma, self).__init__()
         self.name = name
         self._session_id = session_id
+        self.type = type
         self.conclusion_ia = conclusion_ia
         self.conclusion_expert = conclusion_expert
 
@@ -39,6 +41,7 @@ class Toma(BaseModel, db.Model):
         return {
             'id':self.id,
             'name' : self.name,
+            'type': self.type,
             'session_id' : self._session_id,
             'conclusion_ia' : self.conclusion_ia,
             'conclusion_expert' : self.conclusion_expert,
@@ -52,32 +55,16 @@ class Toma(BaseModel, db.Model):
         }
 
     @classmethod
-    def addParamsQuery(cls, query, orderby, sortby):
-
-        if orderby == 'updated_at':
-            if sortby == 'asc':
-                query = query.order_by(db.asc(cls.updated_at))
-            else:
-                query = query.order_by(db.desc(cls.updated_at))
-        else:
-            if sortby == 'asc':
-                query = query.order_by(db.asc(cls.name))
-            else:
-                query = query.order_by(db.desc(cls.name))
-
-        return query
-
-    @classmethod
     def getTomaById(cls, id):
         return cls.query.filter_by(id = id).first()
 
     @classmethod
-    def getAllTomasByDog(cls, session_id, orderby = 'updated_at', sortby = "desc"):
+    def getAllTomasByDog(cls, session_id):
         query = cls.query.filter_by(_session_id = session_id)
-        return cls.addParamsQuery(query, orderby, sortby).all()
+        return query.all()
 
     @classmethod
-    def getTomaByName(cls, name, session_id, orderby = 'updated_at', sortby='desc'):
+    def getTomaByName(cls, name, session_id):
         search = "%{}%".format(name)
         query = cls.query.filter_by(_session_id = session_id).filter(cls.name.like(search))
-        return cls.addParamsQuery(query, orderby, sortby).all()
+        return query.all()

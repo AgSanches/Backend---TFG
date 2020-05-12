@@ -12,14 +12,12 @@ def getTomaParser():
     toma_parser  = reqparse.RequestParser()
 
     toma_parser.add_argument('name', 
-    type=str, required=True, 
-    help="El nombre se encuentra vacío")
+        type=str, required=True,
+        help="El nombre se encuentra vacío")
 
-    toma_parser.add_argument('conclusion_ia', 
-    type=str, required=False)
-
-    toma_parser.add_argument('conclusion_expert', 
-    type=str, required=False)
+    toma_parser.add_argument('type',
+        type=int, required=True,
+        help="El tipo de la toma se encuentra vacío")
 
     return toma_parser
 
@@ -47,7 +45,7 @@ def manageDataToma(data, toma, allowed_item):
                 returnDict[name] = content, key
     
     return returnDict
-    
+
 class TomaManage(Resource):
 
     @jwt_required
@@ -61,6 +59,9 @@ class TomaManage(Resource):
 
         data = toma_parser.parse_args()
 
+        if data['type'] not in [1, 2]:
+            return {"message": "El tipo no es válido, especifique 1 o 2"}, 400
+
         if not Session.getSessionById(data['session_id']):
             return {"message" : "Sesión no existente"}, 404
 
@@ -70,31 +71,6 @@ class TomaManage(Resource):
             toma.save_to_db()
         except:
             return {"message": "No se ha podido guardar la toma"}, 500
-
-        return toma.jsonOutput()
-
-    @jwt_required
-    def put(self):
-
-        toma_parser = getTomaParser()
-
-        toma_parser.add_argument('toma_id', 
-        type=int, required=True, 
-        help="Hay que asignar una toma destino")
-
-        data = toma_parser.parse_args()
-        toma = Toma.getTomaById(data['toma_id'])
-
-        if not toma:
-            return {'message' : 'No existe una toma con el id suministrado'}, 404
-
-        del data['toma_id']
-        toma.update(**data)
-
-        try:
-            toma.save_to_db()
-        except:
-            return {'message' : 'No se ha podido actualizar la toma'}, 500
 
         return toma.jsonOutput()
 
@@ -128,6 +104,31 @@ class TomaController(Resource):
             return {'message' : 'No se ha podido eliminar la toma'}, 500
 
         return {'message' : 'Toma eliminada'}
+
+    @jwt_required
+    def put(self, id):
+
+        toma_parser = getTomaParser()
+
+        data = toma_parser.parse_args()
+
+        if data['type'] not in [1, 2]:
+            return {"message": "El tipo no es válido, especifique 1 o 2"}, 400
+
+        toma = Toma.getTomaById(id)
+
+        if not toma:
+            return {'message' : 'No existe una toma con el id suministrado'}, 404
+
+        del data['toma_id']
+        toma.update(**data)
+
+        try:
+            toma.save_to_db()
+        except:
+            return {'message' : 'No se ha podido actualizar la toma'}, 500
+
+        return toma.jsonOutput()
 
 class TomaGetVideo(Resource):
 
