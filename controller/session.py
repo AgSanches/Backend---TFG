@@ -43,31 +43,6 @@ class SessionManage(Resource):
 
         return session.jsonOutput()
 
-    @jwt_required
-    def put(self):
-
-        session_parser  = getSessionParser()
-
-        session_parser.add_argument('session_id', 
-        type=int, required=True, 
-        help="Hay que asignar una sesión destino")
-
-        data = session_parser.parse_args()
-        session = Session.getSessionById(data['session_id'])
-
-        if not session:
-            return {"message" : "Sesión no existente"}, 404
-
-        del data['session_id']
-        session.update(**data)
-
-        try:
-            session.save_to_db()
-        except:
-            return {"message": "No se ha podido guardar la sesión"}, 500
-
-        return session.jsonOutput()
-
 class SessionController(Resource):
 
     @jwt_required
@@ -81,6 +56,27 @@ class SessionController(Resource):
                 }, 404
 
         return session.jsonOutputComplete()
+
+    @jwt_required
+    def put(self, id):
+
+        session_parser  = getSessionParser()
+
+        data = session_parser.parse_args()
+        session = Session.getSessionById(id)
+
+        if not session:
+            return {"message" : "Sesión no existente"}, 404
+
+        del data['session_id']
+        session.update(**data)
+
+        try:
+            session.save_to_db()
+        except:
+            return {"message": "No se ha podido guardar la sesión"}, 500
+
+        return session.jsonOutput()
 
     @jwt_required
     def delete(self, id):

@@ -15,10 +15,6 @@ def getTomaParser():
         type=str, required=True,
         help="El nombre se encuentra vacío")
 
-    toma_parser.add_argument('type',
-        type=int, required=True,
-        help="El tipo de la toma se encuentra vacío")
-
     return toma_parser
 
 def getTomaFilesParser():
@@ -58,9 +54,6 @@ class TomaManage(Resource):
         help="Hay que asignar una sesión destino")
 
         data = toma_parser.parse_args()
-
-        if data['type'] not in [1, 2]:
-            return {"message": "El tipo no es válido, especifique 1 o 2"}, 400
 
         if not Session.getSessionById(data['session_id']):
             return {"message" : "Sesión no existente"}, 404
@@ -218,6 +211,14 @@ class TomaManageSensors(Resource):
         'sensor_data_back', type = werkzeug.datastructures.FileStorage, 
         required = False, location = "files")
 
+        file_parser.add_argument(
+        'sensor_data_foot_upper', type = werkzeug.datastructures.FileStorage,
+        required = False, location = "files")
+
+        file_parser.add_argument(
+        'sensor_data_foot_lower', type = werkzeug.datastructures.FileStorage,
+        required = False, location = "files")
+
         data = file_parser.parse_args()
 
         toma = Toma.getTomaById(id)
@@ -239,6 +240,10 @@ class TomaManageSensors(Resource):
                 toma.sensor_data_front = key
             elif sensor[1] == 'sensor_data_back':
                 toma.sensor_data_back = key
+            elif sensor[1] == 'sensor_data_foot_upper':
+                toma.sensor_data_foot_upper = key
+            elif sensor[1] == 'sensor_data_foot_lower':
+                toma.sensor_data_foot_lower = key
             
         try:
             toma.save_to_db()

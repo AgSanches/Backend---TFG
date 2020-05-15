@@ -9,7 +9,6 @@ class Toma(BaseModel, db.Model):
     _session_id = db.Column(db.Integer, db.ForeignKey('sessions.id'), nullable = False)
     conclusion_ia = db.Column(db.String(255), nullable = True)
     conclusion_expert = db.Column(db.String(255), nullable = True)
-    type = db.Column(db.Integer, nullable = False) #1 - Check lame, 2 Calculate Angles
 
     video_front = db.Column(db.String(255), nullable = True)
     video_middle = db.Column(db.String(255), nullable = True)
@@ -18,11 +17,13 @@ class Toma(BaseModel, db.Model):
     sensor_data_front = db.Column(db.String(255), nullable = True)
     sensor_data_back = db.Column(db.String(255),  nullable = True)
 
-    def __init__(self, name, session_id, type, conclusion_ia = "", conclusion_expert = ""):
+    sensor_data_foot_upper = db.Column(db.String(255), nullable=True)
+    sensor_data_foot_lower = db.Column(db.String(255), nullable=True)
+
+    def __init__(self, name, session_id, conclusion_ia = "", conclusion_expert = ""):
         super(Toma, self).__init__()
         self.name = name
         self._session_id = session_id
-        self.type = type
         self.conclusion_ia = conclusion_ia
         self.conclusion_expert = conclusion_expert
 
@@ -41,7 +42,6 @@ class Toma(BaseModel, db.Model):
         return {
             'id':self.id,
             'name' : self.name,
-            'type': self.type,
             'session_id' : self._session_id,
             'conclusion_ia' : self.conclusion_ia,
             'conclusion_expert' : self.conclusion_expert,
@@ -51,7 +51,9 @@ class Toma(BaseModel, db.Model):
             'video_middle' : self.video_middle,
             'video_back' : self.video_back,
             'sensor_data_front' : self.sensor_data_front,
-            'sensor_data_back' : self.sensor_data_back
+            'sensor_data_back' : self.sensor_data_back,
+            'sensor_data_foot_upper' : self.sensor_data_foot_upper,
+            'sensor_data_foot_lower' : self.sensor_data_foot_lower
         }
 
     @classmethod
