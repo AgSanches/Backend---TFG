@@ -276,26 +276,48 @@ class TomaReadSensors(Resource):
 
         data = {}
         try:
-            front_data = pd.read_csv(
+            sensor_data = pd.read_csv(
                 getFile(toma.getFolder(), toma.sensor_data_front),
                 skiprows=4,
                 sep="\t"
             )
 
-            data['front_data'] = list(front_data['Roll'])
+            data['front_data'] = list(sensor_data['Roll'])
         except FileNotFoundError:
             data['front_data'] = []
 
         try:
-            front_data = pd.read_csv(
+            sensor_data = pd.read_csv(
                 getFile(toma.getFolder(), toma.sensor_data_back),
                 skiprows=4,
                 sep="\t"
             )
 
-            data['back_data'] = list(front_data['Roll'])
+            data['back_data'] = list(sensor_data['Roll'])
         except FileNotFoundError:
             data['back_data'] = []
+
+        try:
+            sensor_data = pd.read_csv(
+                getFile(toma.getFolder(), toma.sensor_data_foot_upper),
+                skiprows=4,
+                sep="\t"
+            )
+
+            data['sensor_data_foot_upper'] = list(sensor_data['Roll'])
+        except FileNotFoundError:
+            data['sensor_data_foot_upper'] = []
+
+        try:
+            front_data = pd.read_csv(
+                getFile(toma.getFolder(), toma.sensor_data_foot_lower),
+                skiprows=4,
+                sep="\t"
+            )
+
+            data['sensor_data_foot_lower'] = list(front_data['Roll'])
+        except FileNotFoundError:
+            data['sensor_data_foot_lower'] = []
 
         min_range = min(len(data['front_data']), len(data['back_data']))
 
