@@ -105,15 +105,11 @@ class TomaController(Resource):
 
         data = toma_parser.parse_args()
 
-        if data['type'] not in [1, 2]:
-            return {"message": "El tipo no es válido, especifique 1 o 2"}, 400
-
         toma = Toma.getTomaById(id)
 
         if not toma:
             return {'message' : 'No existe una toma con el id suministrado'}, 404
 
-        del data['toma_id']
         toma.update(**data)
 
         try:

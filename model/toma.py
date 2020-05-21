@@ -27,10 +27,8 @@ class Toma(BaseModel, db.Model):
         self.conclusion_ia = conclusion_ia
         self.conclusion_expert = conclusion_expert
 
-    def update(self, name, conclusion_ia, conclusion_expert):
+    def update(self, name):
         self.name = name
-        self.conclusion_ia = conclusion_ia
-        self.conclusion_expert = conclusion_expert
 
     def getFileName(self, prefix):
         return "toma_" + prefix + "_" + str(self.id)
