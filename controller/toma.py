@@ -281,6 +281,8 @@ class TomaReadSensors(Resource):
             data['front_data'] = list(sensor_data['Roll'])
         except FileNotFoundError:
             data['front_data'] = []
+        except UnicodeDecodeError:
+            data['front_data'] = []
 
         try:
             sensor_data = pd.read_csv(
@@ -291,6 +293,8 @@ class TomaReadSensors(Resource):
 
             data['back_data'] = list(sensor_data['Roll'])
         except FileNotFoundError:
+            data['back_data'] = []
+        except UnicodeDecodeError:
             data['back_data'] = []
 
         try:
@@ -303,6 +307,8 @@ class TomaReadSensors(Resource):
             data['sensor_data_foot_upper'] = list(sensor_data['Roll'])
         except FileNotFoundError:
             data['sensor_data_foot_upper'] = []
+        except UnicodeDecodeError:
+            data['sensor_data_foot_upper'] = []
 
         try:
             front_data = pd.read_csv(
@@ -313,6 +319,8 @@ class TomaReadSensors(Resource):
 
             data['sensor_data_foot_lower'] = list(front_data['Roll'])
         except FileNotFoundError:
+            data['sensor_data_foot_lower'] = []
+        except UnicodeDecodeError:
             data['sensor_data_foot_lower'] = []
 
         min_range = min(len(data['front_data']), len(data['back_data']))

@@ -25,6 +25,9 @@ def getParserUser():
                              type=str, required=True,
                              help="La contraseña se encuentra vacía")
 
+    _user_parser.add_argument('role',
+                              type=int, required=False)
+
     return _user_parser
 
 def getParserUpdate():
@@ -64,12 +67,17 @@ class UserRegister(Resource):
                 'message' : 'Usuario existente, pruebe otra dirección de correo'
                 }, 400
 
+        role = 2
+
+        if data['role'] and 0 < data['role'] < 3:
+            role = data['role']
+
         user = User(
             data['name'],
             data['surname'],
             data['email'],
             generate_password_hash(data['password'],method='pbkdf2:sha256'),
-            2
+            role
             )
 
         try:
