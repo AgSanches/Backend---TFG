@@ -323,7 +323,7 @@ class TomaReadSensors(Resource):
         except UnicodeDecodeError:
             data['sensor_data_foot_lower'] = []
 
-        min_range = min(len(data['front_data']), len(data['back_data']))
+        min_range = max(len(data['front_data']), len(data['back_data']))
 
         return {
             "labels": [i+1 for i in range(min_range)],
