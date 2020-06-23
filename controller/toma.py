@@ -271,59 +271,67 @@ class TomaReadSensors(Resource):
             return {'message' : "La toma no existe"}, 404
 
         data = {}
-        try:
-            sensor_data = pd.read_csv(
-                getFile(toma.getFolder(), toma.sensor_data_front),
-                skiprows=4,
-                sep="\t"
-            )
+        if toma.sensor_data_front:
+            try:
+                sensor_data = pd.read_csv(
+                    getFile(toma.getFolder(), toma.sensor_data_front),
+                    skiprows=4,
+                    sep="\t"
+                )
+                sensor_data.fillna(0,inplace=True)
+                data['front_data'] = list(sensor_data['Roll'])
+            except FileNotFoundError:
+                data['front_data'] = []
+            except UnicodeDecodeError:
+                data['front_data'] = []
 
-            data['front_data'] = list(sensor_data['Roll'])
-        except FileNotFoundError:
-            data['front_data'] = []
-        except UnicodeDecodeError:
-            data['front_data'] = []
+        if toma.sensor_data_back:
+            try:
+                sensor_data = pd.read_csv(
+                    getFile(toma.getFolder(), toma.sensor_data_back),
+                    skiprows=4,
+                    sep="\t"
+                )
+                sensor_data.fillna(0,inplace=True)
+                data['back_data'] = list(sensor_data['Roll'])
+            except FileNotFoundError:
+                data['back_data'] = []
+            except UnicodeDecodeError:
+                data['back_data'] = []
 
-        try:
-            sensor_data = pd.read_csv(
-                getFile(toma.getFolder(), toma.sensor_data_back),
-                skiprows=4,
-                sep="\t"
-            )
+        if toma.sensor_data_foot_upper:
+            try:
+                sensor_data = pd.read_csv(
+                    getFile(toma.getFolder(), toma.sensor_data_foot_upper),
+                    skiprows=4,
+                    sep="\t"
+                )
+                sensor_data.fillna(0,inplace=True)
+                data['sensor_data_foot_upper'] = list(sensor_data['Roll'])
+            except FileNotFoundError:
+                data['sensor_data_foot_upper'] = []
+            except UnicodeDecodeError:
+                data['sensor_data_foot_upper'] = []
 
-            data['back_data'] = list(sensor_data['Roll'])
-        except FileNotFoundError:
-            data['back_data'] = []
-        except UnicodeDecodeError:
-            data['back_data'] = []
+        if toma.sensor_data_foot_lower:
+            try:
+                sensor_data = pd.read_csv(
+                    getFile(toma.getFolder(), toma.sensor_data_foot_lower),
+                    skiprows=4,
+                    sep="\t"
+                )
+                sensor_data.fillna(0,inplace=True)
+                data['sensor_data_foot_lower'] = list(sensor_data['Roll'])
+            except FileNotFoundError:
+                data['sensor_data_foot_lower'] = []
+            except UnicodeDecodeError:
+                data['sensor_data_foot_lower'] = []
 
-        try:
-            sensor_data = pd.read_csv(
-                getFile(toma.getFolder(), toma.sensor_data_foot_upper),
-                skiprows=4,
-                sep="\t"
-            )
+        if toma.sensor_data_front and toma.sensor_data_back:
+            min_range = max(len(data['front_data']), len(data['back_data']))
+        else:
+            min_range = 0
 
-            data['sensor_data_foot_upper'] = list(sensor_data['Roll'])
-        except FileNotFoundError:
-            data['sensor_data_foot_upper'] = []
-        except UnicodeDecodeError:
-            data['sensor_data_foot_upper'] = []
-
-        try:
-            front_data = pd.read_csv(
-                getFile(toma.getFolder(), toma.sensor_data_foot_lower),
-                skiprows=4,
-                sep="\t"
-            )
-
-            data['sensor_data_foot_lower'] = list(front_data['Roll'])
-        except FileNotFoundError:
-            data['sensor_data_foot_lower'] = []
-        except UnicodeDecodeError:
-            data['sensor_data_foot_lower'] = []
-
-        min_range = max(len(data['front_data']), len(data['back_data']))
 
         return {
             "labels": [i+1 for i in range(min_range)],
