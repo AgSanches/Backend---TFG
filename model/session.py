@@ -18,10 +18,13 @@ class Session(BaseModel, db.Model):
         self.conclusion_ia = conclusion_ia
         self.conclusion_expert = conclusion_expert
 
-    def update(self, name, conclusion_ia, conclusion_expert ):
-        self.name = name
-        self.conclusion_ia = conclusion_ia
-        self.conclusion_expert = conclusion_expert
+    def update(self, name = None, conclusion_expert = None):
+
+        if name:
+            self.name = name
+
+        if conclusion_expert:
+            self.conclusion_expert = conclusion_expert
 
     def getFolder(self):
         return os.path.join(self.dog.folderOutput(), "Sesion" + str(self.id))

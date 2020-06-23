@@ -10,10 +10,17 @@ def getSessionParser():
     type=str, required=True, 
     help="El nombre se encuentra vacío")
 
-    session_parser.add_argument('conclusion_ia', 
-    type=str, required=False)
 
-    session_parser.add_argument('conclusion_expert', 
+    return session_parser
+
+def getSessionObservationParser():
+    session_parser  = reqparse.RequestParser()
+
+    session_parser.add_argument('name',
+    type=str, required=False,
+    help="El nombre se encuentra vacío")
+
+    session_parser.add_argument('conclusion_expert',
     type=str, required=False)
 
     return session_parser
@@ -60,7 +67,7 @@ class SessionController(Resource):
     @jwt_required
     def put(self, id):
 
-        session_parser  = getSessionParser()
+        session_parser  = getSessionObservationParser()
 
         data = session_parser.parse_args()
         session = Session.getSessionById(id)
@@ -68,7 +75,6 @@ class SessionController(Resource):
         if not session:
             return {"message" : "Sesión no existente"}, 404
 
-        del data['session_id']
         session.update(**data)
 
         try:
