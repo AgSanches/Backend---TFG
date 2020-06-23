@@ -18,6 +18,18 @@ def getTomaParser():
     toma_parser.add_argument('conclusion_expert',
         type=str, required=False)
 
+    return toma_parserdef
+
+def getTomaObservationParser():
+
+    toma_parser  = reqparse.RequestParser()
+
+    toma_parser.add_argument('name',
+        type=str, required=False)
+
+    toma_parser.add_argument('conclusion_expert',
+        type=str, required=False)
+
     return toma_parser
 
 def getTomaFilesParser():
@@ -104,7 +116,7 @@ class TomaController(Resource):
     @jwt_required
     def put(self, id):
 
-        toma_parser = getTomaParser()
+        toma_parser = getTomaObservationParser()
 
         data = toma_parser.parse_args()
 
