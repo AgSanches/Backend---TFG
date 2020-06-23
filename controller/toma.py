@@ -15,6 +15,9 @@ def getTomaParser():
         type=str, required=True,
         help="El nombre se encuentra vacío")
 
+    toma_parser.add_argument('conclusion_expert',
+        type=str, required=False)
+
     return toma_parser
 
 def getTomaFilesParser():
