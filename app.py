@@ -14,7 +14,7 @@ import torch
 from controller.user import UserRegister, UserLogin, UserController, UserList, UserPassword
 from controller.dog import DogController, DogListController, DogObservationController, DogImage, DogManage, DogFindByName
 from controller.session import SessionController, SessionManage, SessionsDogs, SessionsDogsByName
-from controller.toma import TomaController, TomaManage, TomaManageSensors, TomaManageVideo, TomaGetVideo, TomaByName, TomaReadSensors, TomaGiveResults
+from controller.toma import TomaController, TomaManage, TomaManageSensors, TomaManageVideo, TomaGetVideo, TomaByName, TomaReadSensors
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -67,7 +67,6 @@ api.add_resource(TomaManageVideo, '/dog/toma/video/upload/<string:id>')
 api.add_resource(TomaManageSensors, '/dog/toma/sensor/upload/<string:id>')
 
 api.add_resource(TomaReadSensors, '/dog/toma/sensor/<string:id>')
-api.add_resource(TomaGiveResults, '/dog/toma/result/<string:id>')
 
 api.add_resource(TomaGetVideo, '/dog/toma/video/<string:id>/<string:name>')
 
