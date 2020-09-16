@@ -6,6 +6,8 @@ import werkzeug
 from files import allowed_video,save_file, allowed_sensors, checkFileExists, getFile
 import pandas as pd
 from flask_jwt_extended import jwt_required
+import numpy as np
+import torch
 
 def getTomaParser():
 
@@ -275,6 +277,88 @@ class TomaByName(Resource):
             'tomas' : [toma.jsonOutput() for toma in Toma.getTomaByName(name, id)]
         }
 
+class TomaGiveResults(Resource):
+
+    def pad_features(self, inputData, seq_length):
+        features = np.zeros(seq_length, dtype=int)
+        features[-len(inputData):] = inputData[0:seq_length]
+
+        return features
+
+    def predict(self, model, test, sequence_length):
+        model.eval()
+
+        # pad tokenized sequence
+        seq_length = sequence_length
+        features = self.pad_features(test, seq_length)
+        # convert to tensor to pass into your model
+        feature_tensor = torch.from_numpy(features)
+
+        # initialize hidden state
+        h = model.init_hidden(1)
+
+        if (torch.cuda.is_available()):
+            model.cuda()
+            feature_tensor = feature_tensor.cuda()
+
+        # get the output from the model
+        output, h = model(feature_tensor.view(1, -1, 1), h)
+        # printing output value, before rounding
+        print('Predicción: {:.6f}'.format(output.item()))
+        return output.item()
+
+    @jwt_required
+    def get(self, id):
+
+        toma = Toma.getTomaById(id)
+
+        if toma is None:
+            return {'message' : "La toma no existe"}, 404
+
+        if toma.conclusion_ia:
+            return {
+                'result': toma.conclusion_ia
+            }
+
+        if toma.sensor_data_back:
+            try:
+                sequence_length = 250
+
+                print(getFile(toma.getFolder(), toma.sensor_data_back))
+
+                df = pd.read_csv(
+                    getFile(toma.getFolder(), toma.sensor_data_back),
+                    skiprows=4,
+                    sep="\t"
+                )
+
+                sensor_data = df["Roll"][50:].tolist()
+
+                features = self.pad_features(sensor_data, sequence_length)
+
+                # Read model
+                model = torch.load('./data/model1.pt', map_location=torch.device('cpu'))
+
+                # Predict
+                output = self.predict(model, features, sequence_length)
+                toma.conclusion_ia = output
+
+                # Save result
+                toma.save_to_db()
+
+                # Return result
+                return {
+                    'toma': toma.jsonOutput()
+                }
+
+            except FileNotFoundError:
+                return {'message': 'Ha ocurrido un problema, no se encuentra el archivo'}, 500
+            except UnicodeDecodeError:
+                return { 'message' : 'Ha ocurrido un problema'}, 500
+
+        else:
+            return { 'message' : 'La toma no cuenta con datos'}, 404
+
 class TomaReadSensors(Resource):
 
     @jwt_required
@@ -352,3 +436,4 @@ class TomaReadSensors(Resource):
             "labels": [i+1 for i in range(min_range)],
             "data": data
         }
+

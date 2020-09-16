@@ -5,12 +5,16 @@ from flask_cors import CORS, cross_origin
 from files import UPLOAD_FOLDER
 from model.user import User
 from os import environ
+import torch.nn as nn # Neural Networks
+import torch
+
+
 
 # Imports
 from controller.user import UserRegister, UserLogin, UserController, UserList, UserPassword
 from controller.dog import DogController, DogListController, DogObservationController, DogImage, DogManage, DogFindByName
 from controller.session import SessionController, SessionManage, SessionsDogs, SessionsDogsByName
-from controller.toma import TomaController, TomaManage, TomaManageSensors, TomaManageVideo, TomaGetVideo, TomaByName, TomaReadSensors
+from controller.toma import TomaController, TomaManage, TomaManageSensors, TomaManageVideo, TomaGetVideo, TomaByName, TomaReadSensors, TomaGiveResults
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -63,8 +67,67 @@ api.add_resource(TomaManageVideo, '/dog/toma/video/upload/<string:id>')
 api.add_resource(TomaManageSensors, '/dog/toma/sensor/upload/<string:id>')
 
 api.add_resource(TomaReadSensors, '/dog/toma/sensor/<string:id>')
+api.add_resource(TomaGiveResults, '/dog/toma/result/<string:id>')
 
 api.add_resource(TomaGetVideo, '/dog/toma/video/<string:id>/<string:name>')
+
+class LSTM(nn.Module):
+    def __init__(self, hidden_size=256, input_size=1, output_size=1, dropout=0.5, num_layers=2):
+        super(LSTM, self).__init__()
+
+        self.input = input_size
+        self.hidden = hidden_size
+        self.output = output_size
+        self.n_layers = num_layers
+
+        # Definición LSTM
+        self.lstm = nn.LSTM(
+            input_size=input_size,
+            hidden_size=hidden_size,
+            num_layers=num_layers,
+            batch_first=True,
+            dropout=dropout
+        )
+
+        # Definición Fully-Connected
+        self.fc = nn.Linear(
+            hidden_size,
+            output_size
+        )
+
+    def forward(self, state, hidden):
+
+        batch_size = state.size(0)
+
+        state = state.float()
+        # Obtener valores de LSTM
+        output_lstm, hidden = self.lstm(state, hidden)
+
+        # Agrupar salidas LSTM
+        output_lstm = output_lstm.contiguous().view(-1, self.hidden)
+
+        # Pasar salida por FC
+        output = self.fc(output_lstm)
+
+        # Convertir salida para obtener el último valor
+        output = output.view(batch_size, -1, self.output)
+        output = output[:, -1]
+
+        return output, hidden
+
+    def init_hidden(self, batch_size):
+        weight = next(self.parameters()).data
+
+        if (torch.cuda.is_available()):
+            hidden = (
+                weight.new(self.n_layers, batch_size, self.hidden).zero_().cuda(),
+                weight.new(self.n_layers, batch_size, self.hidden).zero_().cuda()
+            )
+        else:
+            hidden = (weight.new(self.n_layers, batch_size, self.hidden).zero_(),
+                      weight.new(self.n_layers, batch_size, self.hidden).zero_())
+
+        return hidden
 
 @app.before_first_request
 def create_tables():

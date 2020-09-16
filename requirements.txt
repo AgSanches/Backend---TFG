@@ -6,3 +6,6 @@ flask-cors
 marshmallow-sqlalchemy
 pandas
 uwsgi
+torch
+torchvision
+scikit-learn
